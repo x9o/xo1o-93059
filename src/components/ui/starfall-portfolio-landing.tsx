@@ -305,7 +305,7 @@ const ProjectGallery: React.FC<{ projects: Project[]; title: string; id: string 
         <button
           onClick={handlePrev}
           disabled={isTransitioning}
-          className="absolute left-0 sm:-left-4 lg:-left-12 top-1/2 -translate-y-1/2 z-10 glass-button w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center disabled:opacity-50 transition-all hover:scale-110 active:scale-95"
+          className="absolute left-2 sm:-left-4 lg:-left-12 top-1/2 -translate-y-1/2 z-20 pointer-events-auto glass-button w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center disabled:opacity-50 transition-all hover:scale-110 active:scale-95"
           aria-label="Previous projects"
         >
           <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -314,7 +314,7 @@ const ProjectGallery: React.FC<{ projects: Project[]; title: string; id: string 
         <button
           onClick={handleNext}
           disabled={isTransitioning}
-          className="absolute right-0 sm:-right-4 lg:-right-12 top-1/2 -translate-y-1/2 z-10 glass-button w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center disabled:opacity-50 transition-all hover:scale-110 active:scale-95"
+          className="absolute right-2 sm:-right-4 lg:-right-12 top-1/2 -translate-y-1/2 z-20 pointer-events-auto glass-button w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center disabled:opacity-50 transition-all hover:scale-110 active:scale-95"
           aria-label="Next projects"
         >
           <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -396,16 +396,21 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
       {showAnimatedBackground && <AuroraBackground />}
       <div className="relative max-w-screen-xl mx-auto w-full">
         <nav className="w-full px-4 sm:px-6 py-4">
-            <div className="max-w-7xl mx-auto flex justify-between items-center">
+            <div className="max-w-7xl mx-auto flex flex-col items-center gap-2 sm:gap-3 md:flex-row md:justify-between md:items-center">
                 <div className="flex items-center space-x-2">
                     <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-border backdrop-blur-md border border-border flex items-center justify-center">
                         <span className="geist-font text-xs sm:text-sm font-bold text-foreground">{logo.initials}</span>
                     </div>
-                    <span className="geist-font text-base sm:text-lg font-medium text-foreground">{logo.name}</span>
+                    <span className="geist-font text-sm sm:text-lg font-medium text-foreground">{logo.name}</span>
                 </div>
-                <div className="hidden md:flex items-center space-x-8">
+                <div className="hidden md:flex items-center gap-6">
                     {navLinks.map(link => (
                         <a key={link.label} href={link.href} className="text-muted-foreground hover:text-foreground transition-colors inter-font text-sm">{link.label}</a>
+                    ))}
+                </div>
+                <div className="flex md:hidden flex-wrap justify-center items-center gap-x-6 gap-y-2 pt-1">
+                    {navLinks.map(link => (
+                        <a key={link.label} href={link.href} className="text-muted-foreground hover:text-foreground transition-colors inter-font text-xs">{link.label}</a>
                     ))}
                 </div>
             </div>
@@ -414,7 +419,7 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
         <main id="about" className="w-full min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 py-12 sm:py-20">
             <div className="max-w-6xl mx-auto text-center">
                 <div className="mb-6 sm:mb-8 float-animation">
-                    <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] geist-font font-light text-foreground tracking-tight mb-4">
+                    <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] geist-font font-light text-foreground tracking-tight mb-4 break-words">
                         {hero.titleLine1}
                         <span className="gradient-text block tracking-tight">{hero.titleLine2Gradient}</span>
                     </h1>
