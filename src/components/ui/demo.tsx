@@ -29,7 +29,7 @@ const customPortfolioData: PortfolioPageProps = {
       onClick: () => { window.location.href = 'mailto:alex.thompson@example.com'; },
     },
   },
-  projects: [
+  games: [
     { 
       title: 'E-commerce Platform', 
       description: 'A scalable online store built with Next.js, TypeScript, and Stripe.',
@@ -46,6 +46,8 @@ const customPortfolioData: PortfolioPageProps = {
       mediaUrl: 'dQw4w9WgXcQ',
       externalLink: 'https://example.com/dashboard'
     },
+  ],
+  pastWork: [
     { 
       title: 'AI Content Generator', 
       description: 'Leveraging OpenAI to generate marketing copy for businesses.',

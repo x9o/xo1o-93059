@@ -21,7 +21,8 @@ export interface PortfolioPageProps {
   resume?: { label: string; onClick?: () => void; };
   hero?: { titleLine1: React.ReactNode; titleLine2Gradient: React.ReactNode; subtitle: React.ReactNode; };
   ctaButtons?: { primary: { label: string; onClick?: () => void; }; secondary: { label: string; onClick?: () => void; }; };
-  projects?: Project[];
+  games?: Project[];
+  pastWork?: Project[];
   stats?: Stat[];
   showAnimatedBackground?: boolean;
 }
@@ -73,29 +74,24 @@ const AuroraBackground: React.FC = () => {
 // --- DEFAULT DATA ---
 const defaultData = {
   logo: { initials: 'MT', name: 'Meng To' },
-  navLinks: [ { label: 'About', href: '#about' }, { label: 'Projects', href: '#projects' }, { label: 'Skills', href: '#skills' } ],
+  navLinks: [ { label: 'About', href: '#about' }, { label: 'Games', href: '#games' }, { label: 'Past Work', href: '#pastwork' }, { label: 'Skills', href: '#skills' } ],
   resume: { label: 'Resume', onClick: () => {} },
   hero: { titleLine1: 'Creative Developer &', titleLine2Gradient: 'Digital Designer', subtitle: 'I craft beautiful digital experiences through code and design. Specializing in modern web development, UI/UX design, and bringing innovative ideas to life.', },
   ctaButtons: { primary: { label: 'View My Work', onClick: () => {} }, secondary: { label: 'Get In Touch', onClick: () => {} }, },
-  projects: [ 
+  games: [ 
     { title: 'FinTech Mobile App', description: 'React Native app with AI-powered financial insights.', tags: ['React Native', 'Node.js'], mediaType: 'custom' as const, imageContent: undefined }, 
     { title: 'Data Visualization Platform', description: 'Interactive dashboard for complex data analysis.', tags: ['D3.js', 'Python'], mediaType: 'custom' as const, imageContent: undefined }, 
     { title: '3D Portfolio Site', description: 'Immersive WebGL experience with 3D elements.', tags: ['Three.js', 'WebGL'], mediaType: 'custom' as const, imageContent: undefined }, 
   ],
+  pastWork: [ 
+    { title: 'E-commerce Platform', description: 'Scalable online store solution.', tags: ['React', 'Node.js'], mediaType: 'custom' as const, imageContent: undefined }, 
+    { title: 'Mobile App', description: 'Cross-platform mobile application.', tags: ['React Native'], mediaType: 'custom' as const, imageContent: undefined }, 
+  ],
   stats: [ { value: '50+', label: 'Projects Completed' }, { value: '5+', label: 'Years Experience' }, { value: '15+', label: 'Happy Clients' }, ],
 };
 
-// --- MAIN CUSTOMIZABLE PORTFOLIO COMPONENT ---
-const PortfolioPage: React.FC<PortfolioPageProps> = ({
-  logo = defaultData.logo,
-  navLinks = defaultData.navLinks,
-  resume = defaultData.resume,
-  hero = defaultData.hero,
-  ctaButtons = defaultData.ctaButtons,
-  projects = defaultData.projects,
-  stats = defaultData.stats,
-  showAnimatedBackground = true,
-}) => {
+// --- PROJECT GALLERY COMPONENT ---
+const ProjectGallery: React.FC<{ projects: Project[]; title: string; id: string }> = ({ projects, title, id }) => {
   const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const projectsPerView = 3;
@@ -129,6 +125,100 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
     const index = (currentProjectIndex + i) % projects.length;
     visibleProjects.push(projects[index]);
   }
+
+  return (
+    <div id={id} className="mb-16">
+      <h2 className="text-3xl md:text-4xl font-light text-foreground mb-8 text-center geist-font tracking-tight">{title}</h2>
+      <div className="relative max-w-6xl mx-auto">
+        {/* Navigation Buttons */}
+        <button
+          onClick={handlePrev}
+          disabled={isTransitioning}
+          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 z-10 glass-button w-10 h-10 rounded-full flex items-center justify-center disabled:opacity-50 transition-all hover:scale-110 active:scale-95"
+          aria-label="Previous projects"
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+        
+        <button
+          onClick={handleNext}
+          disabled={isTransitioning}
+          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 z-10 glass-button w-10 h-10 rounded-full flex items-center justify-center disabled:opacity-50 transition-all hover:scale-110 active:scale-95"
+          aria-label="Next projects"
+        >
+          <ChevronRight className="w-5 h-5" />
+        </button>
+        
+        {/* Projects Grid */}
+        <div className="overflow-hidden">
+          <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-300 ease-out ${
+            isTransitioning ? 'opacity-0 translate-x-8' : 'opacity-100 translate-x-0'
+          }`}>
+            {visibleProjects.map((project, index) => (
+              <div key={`${currentProjectIndex}-${index}`} className="glass-card rounded-2xl p-6 text-left">
+                <div className="project-image rounded-xl h-48 mb-4 overflow-hidden relative group">
+                  {project.mediaType === 'image' && project.mediaUrl ? (
+                    <img 
+                      src={project.mediaUrl} 
+                      alt={project.title}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : project.mediaType === 'youtube' && project.mediaUrl ? (
+                    <iframe
+                      src={`https://www.youtube.com/embed/${project.mediaUrl}`}
+                      className="w-full h-full"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      {project.imageContent}
+                    </div>
+                  )}
+                </div>
+                
+                <div className="flex items-start justify-between mb-2">
+                  <h3 className="text-lg font-medium text-card-foreground geist-font flex-1">{project.title}</h3>
+                  {project.externalLink && (
+                    <a
+                      href={project.externalLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="ml-2 p-1.5 glass-button rounded-lg hover:bg-white/10 transition-all"
+                      aria-label="Open external link"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  )}
+                </div>
+                
+                <p className="text-muted-foreground text-sm inter-font mb-4">{project.description}</p>
+                <div className="flex flex-wrap gap-2">
+                  {project.tags.map(tag => (
+                    <span key={tag} className="skill-badge px-2 py-1 rounded text-xs text-muted-foreground">{tag}</span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// --- MAIN CUSTOMIZABLE PORTFOLIO COMPONENT ---
+const PortfolioPage: React.FC<PortfolioPageProps> = ({
+  logo = defaultData.logo,
+  navLinks = defaultData.navLinks,
+  resume = defaultData.resume,
+  hero = defaultData.hero,
+  ctaButtons = defaultData.ctaButtons,
+  games = defaultData.games,
+  pastWork = defaultData.pastWork,
+  stats = defaultData.stats,
+  showAnimatedBackground = true,
+}) => {
   
   return (
     <div className="bg-background text-foreground geist-font">
@@ -165,80 +255,15 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
                     <button onClick={ctaButtons.secondary.onClick} className="glass-button min-w-[160px] inter-font text-sm font-medium text-foreground rounded-lg px-6 py-3">{ctaButtons.secondary.label}</button>
                 </div>
                 <div className="divider mb-16" />
-                <div id="projects" className="relative max-w-6xl mx-auto mb-16">
-                    {/* Navigation Buttons */}
-                    <button
-                        onClick={handlePrev}
-                        disabled={isTransitioning}
-                        className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 z-10 glass-button w-10 h-10 rounded-full flex items-center justify-center disabled:opacity-50 transition-all hover:scale-110 active:scale-95"
-                        aria-label="Previous projects"
-                    >
-                        <ChevronLeft className="w-5 h-5" />
-                    </button>
-                    
-                    <button
-                        onClick={handleNext}
-                        disabled={isTransitioning}
-                        className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 z-10 glass-button w-10 h-10 rounded-full flex items-center justify-center disabled:opacity-50 transition-all hover:scale-110 active:scale-95"
-                        aria-label="Next projects"
-                    >
-                        <ChevronRight className="w-5 h-5" />
-                    </button>
-                    
-                    {/* Projects Grid */}
-                    <div className="overflow-hidden">
-                        <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-300 ease-out ${
-                            isTransitioning ? 'opacity-0 translate-x-8' : 'opacity-100 translate-x-0'
-                        }`}>
-                            {visibleProjects.map((project, index) => (
-                                <div key={`${currentProjectIndex}-${index}`} className="glass-card rounded-2xl p-6 text-left">
-                                <div className="project-image rounded-xl h-48 mb-4 overflow-hidden relative group">
-                                    {project.mediaType === 'image' && project.mediaUrl ? (
-                                        <img 
-                                            src={project.mediaUrl} 
-                                            alt={project.title}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    ) : project.mediaType === 'youtube' && project.mediaUrl ? (
-                                        <iframe
-                                            src={`https://www.youtube.com/embed/${project.mediaUrl}`}
-                                            className="w-full h-full"
-                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                            allowFullScreen
-                                        />
-                                    ) : (
-                                        <div className="w-full h-full flex items-center justify-center">
-                                            {project.imageContent}
-                                        </div>
-                                    )}
-                                </div>
-                                
-                                <div className="flex items-start justify-between mb-2">
-                                    <h3 className="text-lg font-medium text-card-foreground geist-font flex-1">{project.title}</h3>
-                                    {project.externalLink && (
-                                        <a
-                                            href={project.externalLink}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="ml-2 p-1.5 glass-button rounded-lg hover:bg-white/10 transition-all"
-                                            aria-label="Open external link"
-                                        >
-                                            <ExternalLink className="w-4 h-4" />
-                                        </a>
-                                    )}
-                                </div>
-                                
-                                <p className="text-muted-foreground text-sm inter-font mb-4">{project.description}</p>
-                                <div className="flex flex-wrap gap-2">
-                                    {project.tags.map(tag => (
-                                        <span key={tag} className="skill-badge px-2 py-1 rounded text-xs text-muted-foreground">{tag}</span>
-                                    ))}
-                                </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
+                
+                {/* Games Gallery */}
+                {games && games.length > 0 && <ProjectGallery projects={games} title="Games" id="games" />}
+                
+                <div className="divider mb-16" />
+                
+                {/* Past Work Gallery */}
+                {pastWork && pastWork.length > 0 && <ProjectGallery projects={pastWork} title="Past Work" id="pastwork" />}
+                
                 <div className="divider mb-16" />
                 <div id="skills" className="flex flex-col sm:flex-row justify-center items-center gap-8 text-center">
                     {stats.map((stat, index) => (

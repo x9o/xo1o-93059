@@ -8,7 +8,8 @@ const Index = () => {
     },
     navLinks: [
       { label: 'About', href: '#about' },
-      { label: 'Projects', href: '#projects' },
+      { label: 'Games', href: '#games' },
+      { label: 'Past Work', href: '#pastwork' },
       { label: 'Skills', href: '#skills' },
     ],
     resume: {
@@ -23,20 +24,20 @@ const Index = () => {
     ctaButtons: {
       primary: {
         label: 'View My Work',
-        onClick: () => { document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' }); },
+        onClick: () => { document.getElementById('games')?.scrollIntoView({ behavior: 'smooth' }); },
       },
       secondary: {
         label: 'Get In Touch',
         onClick: () => { document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' }); },
       },
     },
-    projects: [
+    games: [
       { 
         title: 'Game System', 
         description: 'Advanced monetization and progression systems for high-retention gameplay.',
         tags: ['Lua', 'Roblox Studio', 'DataStore'],
         mediaType: 'youtube',
-        mediaUrl: 'dQw4w9WgXcQ', // YouTube video ID
+        mediaUrl: 'dQw4w9WgXcQ',
         externalLink: 'https://www.roblox.com/games/12345/Example-Game',
       },
       { 
@@ -63,6 +64,8 @@ const Index = () => {
         mediaUrl: 'dQw4w9WgXcQ',
         externalLink: 'https://www.roblox.com/games/11111/Shop-System',
       },
+    ],
+    pastWork: [
       { 
         title: 'Anti-Cheat Module', 
         description: 'Server-side anti-cheat detecting exploits and suspicious behavior.',
@@ -70,6 +73,22 @@ const Index = () => {
         mediaType: 'image',
         mediaUrl: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400',
         externalLink: 'https://www.roblox.com/games/22222/Secure-Game',
+      },
+      { 
+        title: 'Admin Commands', 
+        description: 'Comprehensive admin panel with moderation tools and logging.',
+        tags: ['Lua', 'UI', 'Commands'],
+        mediaType: 'youtube',
+        mediaUrl: 'dQw4w9WgXcQ',
+        externalLink: 'https://www.roblox.com/games/33333/Admin-Demo',
+      },
+      { 
+        title: 'Pet System', 
+        description: 'Collectible pet system with trading and breeding mechanics.',
+        tags: ['Lua', 'DataStore', 'Animation'],
+        mediaType: 'image',
+        mediaUrl: 'https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?w=400',
+        externalLink: 'https://www.roblox.com/games/44444/Pet-Game',
       },
     ],
     stats: [
