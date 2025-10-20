@@ -10,7 +10,6 @@ const Index = () => {
       { label: 'About', href: '#about' },
       { label: 'Games', href: '#games' },
       { label: 'Past Work', href: '#pastwork' },
-      { label: 'Skills', href: '#skills' },
     ],
     resume: {
       label: 'Resume',
@@ -28,7 +27,7 @@ const Index = () => {
       },
       secondary: {
         label: 'Get In Touch',
-        onClick: () => { document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' }); },
+        onClick: () => { document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); },
       },
     },
     games: [

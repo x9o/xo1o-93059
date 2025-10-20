@@ -298,7 +298,7 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
                 {discordUsername && (
                     <>
                         <div className="divider my-12" />
-                        <div className="flex justify-center">
+                        <div id="contact" className="flex justify-center">
                             <button
                                 onClick={handleCopyDiscord}
                                 className="glass-button px-6 py-3 rounded-2xl flex items-center gap-3 hover:bg-white/10 transition-all group"
