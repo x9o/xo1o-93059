@@ -34,17 +34,42 @@ const Index = () => {
       { 
         title: 'Game System', 
         description: 'Advanced monetization and progression systems for high-retention gameplay.',
-        tags: ['Lua', 'Roblox Studio', 'DataStore'] 
+        tags: ['Lua', 'Roblox Studio', 'DataStore'],
+        mediaType: 'youtube',
+        mediaUrl: 'dQw4w9WgXcQ', // YouTube video ID
+        externalLink: 'https://www.roblox.com/games/12345/Example-Game',
       },
       { 
         title: 'Combat Framework', 
         description: 'Smooth and responsive combat system with hit detection and animations.',
-        tags: ['Lua', 'RemoteEvents', 'Animation'] 
+        tags: ['Lua', 'RemoteEvents', 'Animation'],
+        mediaType: 'image',
+        mediaUrl: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=400',
+        externalLink: 'https://www.roblox.com/games/67890/Combat-Demo',
       },
       { 
         title: 'UI Systems', 
         description: 'Intuitive and polished user interfaces for seamless player experience.',
-        tags: ['Lua', 'Roact', 'Spring Animation'] 
+        tags: ['Lua', 'Roact', 'Spring Animation'],
+        mediaType: 'image',
+        mediaUrl: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400',
+        externalLink: 'https://www.youtube.com/watch?v=example',
+      },
+      { 
+        title: 'Shop System', 
+        description: 'Complete shop system with inventory management and purchase verification.',
+        tags: ['Lua', 'DataStore', 'UI'],
+        mediaType: 'youtube',
+        mediaUrl: 'dQw4w9WgXcQ',
+        externalLink: 'https://www.roblox.com/games/11111/Shop-System',
+      },
+      { 
+        title: 'Anti-Cheat Module', 
+        description: 'Server-side anti-cheat detecting exploits and suspicious behavior.',
+        tags: ['Lua', 'Security', 'RemoteEvents'],
+        mediaType: 'image',
+        mediaUrl: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400',
+        externalLink: 'https://www.roblox.com/games/22222/Secure-Game',
       },
     ],
     stats: [

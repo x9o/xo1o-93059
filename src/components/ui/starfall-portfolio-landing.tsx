@@ -1,9 +1,18 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
+import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
 
 // --- TYPE DEFINITIONS FOR PROPS ---
 interface NavLink { label: string; href: string; }
-interface Project { title: string; description: string; tags: string[]; imageContent?: React.ReactNode; }
+interface Project { 
+  title: string; 
+  description: string; 
+  tags: string[]; 
+  imageContent?: React.ReactNode;
+  mediaType?: 'image' | 'youtube' | 'custom';
+  mediaUrl?: string;
+  externalLink?: string;
+}
 interface Stat { value: string; label: string; }
 
 export interface PortfolioPageProps {
@@ -68,7 +77,11 @@ const defaultData = {
   resume: { label: 'Resume', onClick: () => {} },
   hero: { titleLine1: 'Creative Developer &', titleLine2Gradient: 'Digital Designer', subtitle: 'I craft beautiful digital experiences through code and design. Specializing in modern web development, UI/UX design, and bringing innovative ideas to life.', },
   ctaButtons: { primary: { label: 'View My Work', onClick: () => {} }, secondary: { label: 'Get In Touch', onClick: () => {} }, },
-  projects: [ { title: 'FinTech Mobile App', description: 'React Native app with AI-powered financial insights.', tags: ['React Native', 'Node.js'], imageContent: undefined }, { title: 'Data Visualization Platform', description: 'Interactive dashboard for complex data analysis.', tags: ['D3.js', 'Python'], imageContent: undefined }, { title: '3D Portfolio Site', description: 'Immersive WebGL experience with 3D elements.', tags: ['Three.js', 'WebGL'], imageContent: undefined }, ],
+  projects: [ 
+    { title: 'FinTech Mobile App', description: 'React Native app with AI-powered financial insights.', tags: ['React Native', 'Node.js'], mediaType: 'custom' as const, imageContent: undefined }, 
+    { title: 'Data Visualization Platform', description: 'Interactive dashboard for complex data analysis.', tags: ['D3.js', 'Python'], mediaType: 'custom' as const, imageContent: undefined }, 
+    { title: '3D Portfolio Site', description: 'Immersive WebGL experience with 3D elements.', tags: ['Three.js', 'WebGL'], mediaType: 'custom' as const, imageContent: undefined }, 
+  ],
   stats: [ { value: '50+', label: 'Projects Completed' }, { value: '5+', label: 'Years Experience' }, { value: '15+', label: 'Happy Clients' }, ],
 };
 
@@ -83,6 +96,26 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
   stats = defaultData.stats,
   showAnimatedBackground = true,
 }) => {
+  const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
+  const projectsPerView = 3;
+  
+  const canGoPrev = currentProjectIndex > 0;
+  const canGoNext = currentProjectIndex + projectsPerView < projects.length;
+  
+  const handlePrev = () => {
+    if (canGoPrev) {
+      setCurrentProjectIndex(prev => prev - 1);
+    }
+  };
+  
+  const handleNext = () => {
+    if (canGoNext) {
+      setCurrentProjectIndex(prev => prev + 1);
+    }
+  };
+  
+  const visibleProjects = projects.slice(currentProjectIndex, currentProjectIndex + projectsPerView);
+  
   return (
     <div className="bg-background text-foreground geist-font">
       {showAnimatedBackground && <AuroraBackground />}
@@ -118,19 +151,75 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
                     <button onClick={ctaButtons.secondary.onClick} className="glass-button min-w-[160px] inter-font text-sm font-medium text-foreground rounded-lg px-6 py-3">{ctaButtons.secondary.label}</button>
                 </div>
                 <div className="divider mb-16" />
-                <div id="projects" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mb-16">
-                    {projects.map((project, index) => (
-                        <div key={index} className="glass-card rounded-2xl p-6 text-left">
-                            <div className="project-image rounded-xl h-32 mb-4 flex items-center justify-center">{project.imageContent}</div>
-                            <h3 className="text-lg font-medium text-card-foreground mb-2 geist-font">{project.title}</h3>
-                            <p className="text-muted-foreground text-sm inter-font mb-4">{project.description}</p>
-                            <div className="flex flex-wrap gap-2">
-                                {project.tags.map(tag => (
-                                    <span key={tag} className="skill-badge px-2 py-1 rounded text-xs text-muted-foreground">{tag}</span>
-                                ))}
+                <div id="projects" className="relative max-w-6xl mx-auto mb-16">
+                    {/* Navigation Buttons */}
+                    <button
+                        onClick={handlePrev}
+                        disabled={!canGoPrev}
+                        className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 z-10 glass-button w-10 h-10 rounded-full flex items-center justify-center disabled:opacity-30 disabled:cursor-not-allowed transition-all hover:scale-110"
+                        aria-label="Previous projects"
+                    >
+                        <ChevronLeft className="w-5 h-5" />
+                    </button>
+                    
+                    <button
+                        onClick={handleNext}
+                        disabled={!canGoNext}
+                        className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 z-10 glass-button w-10 h-10 rounded-full flex items-center justify-center disabled:opacity-30 disabled:cursor-not-allowed transition-all hover:scale-110"
+                        aria-label="Next projects"
+                    >
+                        <ChevronRight className="w-5 h-5" />
+                    </button>
+                    
+                    {/* Projects Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-500">
+                        {visibleProjects.map((project, index) => (
+                            <div key={currentProjectIndex + index} className="glass-card rounded-2xl p-6 text-left">
+                                <div className="project-image rounded-xl h-48 mb-4 overflow-hidden relative group">
+                                    {project.mediaType === 'image' && project.mediaUrl ? (
+                                        <img 
+                                            src={project.mediaUrl} 
+                                            alt={project.title}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    ) : project.mediaType === 'youtube' && project.mediaUrl ? (
+                                        <iframe
+                                            src={`https://www.youtube.com/embed/${project.mediaUrl}`}
+                                            className="w-full h-full"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                            allowFullScreen
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center">
+                                            {project.imageContent}
+                                        </div>
+                                    )}
+                                </div>
+                                
+                                <div className="flex items-start justify-between mb-2">
+                                    <h3 className="text-lg font-medium text-card-foreground geist-font flex-1">{project.title}</h3>
+                                    {project.externalLink && (
+                                        <a
+                                            href={project.externalLink}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="ml-2 p-1.5 glass-button rounded-lg hover:bg-white/10 transition-all"
+                                            aria-label="Open external link"
+                                        >
+                                            <ExternalLink className="w-4 h-4" />
+                                        </a>
+                                    )}
+                                </div>
+                                
+                                <p className="text-muted-foreground text-sm inter-font mb-4">{project.description}</p>
+                                <div className="flex flex-wrap gap-2">
+                                    {project.tags.map(tag => (
+                                        <span key={tag} className="skill-badge px-2 py-1 rounded text-xs text-muted-foreground">{tag}</span>
+                                    ))}
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
                 <div className="divider mb-16" />
                 <div id="skills" className="flex flex-col sm:flex-row justify-center items-center gap-8 text-center">
