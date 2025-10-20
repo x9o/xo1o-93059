@@ -187,7 +187,18 @@ const defaultData = {
 const ProjectGallery: React.FC<{ projects: Project[]; title: string; id: string }> = ({ projects, title, id }) => {
   const [currentProjectIndex, setCurrentProjectIndex] = useState(projects.length);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const projectsPerView = 3;
+  const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
+  
+  useEffect(() => {
+    const checkViewport = () => {
+      setIsMobile(window.innerWidth < 640);
+      setIsTablet(window.innerWidth >= 640 && window.innerWidth < 1024);
+    };
+    checkViewport();
+    window.addEventListener('resize', checkViewport);
+    return () => window.removeEventListener('resize', checkViewport);
+  }, []);
   
   // Create infinite loop by tripling the array
   const infiniteProjects = [...projects, ...projects, ...projects];
@@ -226,8 +237,8 @@ const ProjectGallery: React.FC<{ projects: Project[]; title: string; id: string 
   
   // Render card helper
   const renderCard = (project: Project, index: number) => (
-    <div key={`${project.title}-${index}`} className="glass-card rounded-2xl p-6 text-left flex-shrink-0" style={{ width: 'calc(33.333% - 1rem)' }}>
-      <div className="project-image rounded-xl h-48 mb-4 overflow-hidden relative group">
+    <div key={`${project.title}-${index}`} className="glass-card rounded-2xl p-4 sm:p-6 text-left flex-shrink-0 w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-1rem)]">
+      <div className="project-image rounded-xl h-40 sm:h-48 mb-4 overflow-hidden relative group">
         {project.mediaType === 'image' && project.mediaUrl ? (
           <img 
             src={project.mediaUrl} 
@@ -272,40 +283,47 @@ const ProjectGallery: React.FC<{ projects: Project[]; title: string; id: string 
     </div>
   );
   
-  // Calculate transform based on current index
+  // Calculate transform based on current index and viewport
   const calculateTransform = () => {
-    const cardWidth = 33.333; // percentage
-    const gap = 1.5; // rem (gap-6 = 1.5rem)
-    return `translateX(calc(-${currentProjectIndex * cardWidth}% - ${currentProjectIndex * gap}rem))`;
+    if (isMobile) {
+      // Mobile: 100% width cards with 0.75rem gap
+      return `translateX(calc(-${currentProjectIndex * 100}% - ${currentProjectIndex * 0.75}rem))`;
+    } else if (isTablet) {
+      // Tablet: 50% width cards with 1rem gap
+      return `translateX(calc(-${currentProjectIndex * 50}% - ${currentProjectIndex * 1}rem))`;
+    } else {
+      // Desktop: 33.333% width cards with 1.5rem gap
+      return `translateX(calc(-${currentProjectIndex * 33.333}% - ${currentProjectIndex * 1.5}rem))`;
+    }
   };
 
   return (
-    <div id={id} className="mb-16">
-      <h2 className="text-3xl md:text-4xl font-light text-foreground mb-8 text-center geist-font tracking-tight">{title}</h2>
-      <div className="relative max-w-6xl mx-auto">
+    <div id={id} className="mb-12 sm:mb-16">
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-light text-foreground mb-6 sm:mb-8 text-center geist-font tracking-tight px-4">{title}</h2>
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-8 lg:px-12">
         {/* Navigation Buttons */}
         <button
           onClick={handlePrev}
           disabled={isTransitioning}
-          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 z-10 glass-button w-10 h-10 rounded-full flex items-center justify-center disabled:opacity-50 transition-all hover:scale-110 active:scale-95"
+          className="absolute left-0 sm:-left-4 lg:-left-12 top-1/2 -translate-y-1/2 z-10 glass-button w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center disabled:opacity-50 transition-all hover:scale-110 active:scale-95"
           aria-label="Previous projects"
         >
-          <ChevronLeft className="w-5 h-5" />
+          <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
         
         <button
           onClick={handleNext}
           disabled={isTransitioning}
-          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 z-10 glass-button w-10 h-10 rounded-full flex items-center justify-center disabled:opacity-50 transition-all hover:scale-110 active:scale-95"
+          className="absolute right-0 sm:-right-4 lg:-right-12 top-1/2 -translate-y-1/2 z-10 glass-button w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center disabled:opacity-50 transition-all hover:scale-110 active:scale-95"
           aria-label="Next projects"
         >
-          <ChevronRight className="w-5 h-5" />
+          <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
         
         {/* Projects Strip Container */}
         <div className="overflow-hidden">
           <div 
-            className="flex gap-6 transition-transform duration-300 ease-in-out"
+            className="flex gap-3 sm:gap-4 lg:gap-6 transition-transform duration-300 ease-in-out"
             style={{
               transform: calculateTransform()
             }}
@@ -377,13 +395,13 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
     <div className="bg-background text-foreground geist-font">
       {showAnimatedBackground && <AuroraBackground />}
       <div className="relative">
-        <nav className="w-full px-6 py-4">
+        <nav className="w-full px-4 sm:px-6 py-4">
             <div className="max-w-7xl mx-auto flex justify-between items-center">
                 <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 rounded-lg bg-border backdrop-blur-md border border-border flex items-center justify-center">
-                        <span className="geist-font text-sm font-bold text-foreground">{logo.initials}</span>
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-border backdrop-blur-md border border-border flex items-center justify-center">
+                        <span className="geist-font text-xs sm:text-sm font-bold text-foreground">{logo.initials}</span>
                     </div>
-                    <span className="geist-font text-lg font-medium text-foreground">{logo.name}</span>
+                    <span className="geist-font text-base sm:text-lg font-medium text-foreground">{logo.name}</span>
                 </div>
                 <div className="hidden md:flex items-center space-x-8">
                     {navLinks.map(link => (
@@ -393,14 +411,14 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
             </div>
         </nav>
         <div className="divider" />
-        <main id="about" className="w-full min-h-screen flex flex-col items-center justify-center px-6 py-20">
+        <main id="about" className="w-full min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 py-12 sm:py-20">
             <div className="max-w-6xl mx-auto text-center">
-                <div className="mb-8 float-animation">
-                    <h1 className="md:text-6xl lg:text-7xl leading-[1.1] geist-font text-5xl font-light text-foreground tracking-tight mb-4">
+                <div className="mb-6 sm:mb-8 float-animation">
+                    <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] geist-font font-light text-foreground tracking-tight mb-4">
                         {hero.titleLine1}
                         <span className="gradient-text block tracking-tight">{hero.titleLine2Gradient}</span>
                     </h1>
-                    <p className="md:text-xl max-w-3xl leading-relaxed inter-font text-lg font-light text-muted-foreground mx-auto">{hero.subtitle}</p>
+                    <p className="text-base sm:text-lg md:text-xl max-w-3xl leading-relaxed inter-font font-light text-muted-foreground mx-auto px-4">{hero.subtitle}</p>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
                     <button onClick={ctaButtons.primary.onClick} className="primary-button px-6 py-3 text-foreground rounded-lg font-medium text-sm min-w-[160px]">{ctaButtons.primary.label}</button>
@@ -416,13 +434,13 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
                 {/* Past Work Gallery */}
                 {pastWork && pastWork.length > 0 && <ProjectGallery projects={pastWork} title="Past Work" id="pastwork" />}
                 
-                <div className="divider mb-16" />
-                <div id="skills" className="flex flex-col sm:flex-row justify-center items-center gap-8 text-center">
+                <div className="divider mb-12 sm:mb-16" />
+                <div id="skills" className="flex flex-col sm:flex-row justify-center items-center gap-6 sm:gap-8 text-center px-4">
                     {stats.map((stat, index) => (
                         <React.Fragment key={stat.label}>
                             <div>
-                                <div className="text-3xl md:text-4xl font-light text-foreground mb-1 geist-font tracking-tight">{stat.value}</div>
-                                <div className="text-muted-foreground text-sm inter-font font-normal">{stat.label}</div>
+                                <div className="text-2xl sm:text-3xl md:text-4xl font-light text-foreground mb-1 geist-font tracking-tight">{stat.value}</div>
+                                <div className="text-muted-foreground text-xs sm:text-sm inter-font font-normal">{stat.label}</div>
                             </div>
                             {index < stats.length - 1 && <div className="hidden sm:block w-px h-12 bg-gradient-to-b from-transparent via-input to-transparent" />}
                         </React.Fragment>
@@ -432,22 +450,22 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
                 {/* Discord Section */}
                 {discordUsername && (
                     <>
-                        <div className="divider my-12" />
-                        <div id="contact" className="flex justify-center">
+                        <div className="divider my-8 sm:my-12" />
+                        <div id="contact" className="flex justify-center px-4">
                             <button
                                 onClick={handleCopyDiscord}
-                                className="glass-button px-6 py-3 rounded-2xl flex items-center gap-3 hover:bg-white/10 transition-all group"
+                                className="glass-button px-4 sm:px-6 py-2.5 sm:py-3 rounded-2xl flex items-center gap-2 sm:gap-3 hover:bg-white/10 transition-all group"
                                 aria-label="Copy Discord username"
                             >
                                 <svg 
-                                    className={`w-6 h-6 transition-transform duration-500 ${isDiscordAnimating ? 'scale-125 rotate-12' : ''}`}
+                                    className={`w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-500 ${isDiscordAnimating ? 'scale-125 rotate-12' : ''}`}
                                     viewBox="0 0 127.14 96.36"
                                     fill="currentColor"
                                 >
                                     <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
                                 </svg>
-                                <span className="text-foreground font-medium inter-font">{discordUsername}</span>
-                                <Copy className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+                                <span className="text-foreground font-medium inter-font text-sm sm:text-base">{discordUsername}</span>
+                                <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
                             </button>
                         </div>
                     </>
