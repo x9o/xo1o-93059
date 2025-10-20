@@ -97,24 +97,34 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
   showAnimatedBackground = true,
 }) => {
   const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
   const projectsPerView = 3;
   
-  const canGoPrev = currentProjectIndex > 0;
-  const canGoNext = currentProjectIndex + projectsPerView < projects.length;
-  
   const handlePrev = () => {
-    if (canGoPrev) {
-      setCurrentProjectIndex(prev => prev - 1);
-    }
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setCurrentProjectIndex(prev => {
+      const newIndex = prev - 1;
+      return newIndex < 0 ? projects.length - 1 : newIndex;
+    });
+    setTimeout(() => setIsAnimating(false), 500);
   };
   
   const handleNext = () => {
-    if (canGoNext) {
-      setCurrentProjectIndex(prev => prev + 1);
-    }
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setCurrentProjectIndex(prev => {
+      const newIndex = prev + 1;
+      return newIndex >= projects.length ? 0 : newIndex;
+    });
+    setTimeout(() => setIsAnimating(false), 500);
   };
   
-  const visibleProjects = projects.slice(currentProjectIndex, currentProjectIndex + projectsPerView);
+  const visibleProjects = [];
+  for (let i = 0; i < projectsPerView; i++) {
+    const index = (currentProjectIndex + i) % projects.length;
+    visibleProjects.push(projects[index]);
+  }
   
   return (
     <div className="bg-background text-foreground geist-font">
@@ -155,8 +165,8 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
                     {/* Navigation Buttons */}
                     <button
                         onClick={handlePrev}
-                        disabled={!canGoPrev}
-                        className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 z-10 glass-button w-10 h-10 rounded-full flex items-center justify-center disabled:opacity-30 disabled:cursor-not-allowed transition-all hover:scale-110"
+                        disabled={isAnimating}
+                        className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 z-10 glass-button w-10 h-10 rounded-full flex items-center justify-center disabled:opacity-50 transition-all hover:scale-110 active:scale-95"
                         aria-label="Previous projects"
                     >
                         <ChevronLeft className="w-5 h-5" />
@@ -164,17 +174,17 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
                     
                     <button
                         onClick={handleNext}
-                        disabled={!canGoNext}
-                        className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 z-10 glass-button w-10 h-10 rounded-full flex items-center justify-center disabled:opacity-30 disabled:cursor-not-allowed transition-all hover:scale-110"
+                        disabled={isAnimating}
+                        className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 z-10 glass-button w-10 h-10 rounded-full flex items-center justify-center disabled:opacity-50 transition-all hover:scale-110 active:scale-95"
                         aria-label="Next projects"
                     >
                         <ChevronRight className="w-5 h-5" />
                     </button>
                     
                     {/* Projects Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-500">
+                    <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-500 ${isAnimating ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
                         {visibleProjects.map((project, index) => (
-                            <div key={currentProjectIndex + index} className="glass-card rounded-2xl p-6 text-left">
+                            <div key={`${currentProjectIndex}-${index}`} className="glass-card rounded-2xl p-6 text-left animate-fade-in">
                                 <div className="project-image rounded-xl h-48 mb-4 overflow-hidden relative group">
                                     {project.mediaType === 'image' && project.mediaUrl ? (
                                         <img 
