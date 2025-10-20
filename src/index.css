@@ -57,8 +57,20 @@ All colors MUST be HSL.
   html, body {
     width: 100%;
     height: 100%;
+    max-width: 100vw;
     overflow-x: hidden;
     position: relative;
+  }
+
+  #root, main, nav, section, header, footer {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  img, video, canvas, iframe, svg {
+    max-width: 100%;
+    height: auto;
+    display: block;
   }
 
   body {
