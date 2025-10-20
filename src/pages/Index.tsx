@@ -96,6 +96,7 @@ const Index = () => {
       { value: '50+', label: 'Projects Completed' },
       { value: '100K+', label: 'Players Reached' },
     ],
+    discordUsername: '@xo1o',
     showAnimatedBackground: true,
   };
 
