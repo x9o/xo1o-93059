@@ -75,58 +75,209 @@ const AuroraBackground: React.FC = () => {
 
 // --- DEFAULT DATA ---
 const defaultData = {
-  logo: { initials: 'MT', name: 'Meng To' },
+  logo: { initials: 'X0', name: 'X0L00X' },
   navLinks: [ { label: 'About', href: '#about' }, { label: 'Games', href: '#games' }, { label: 'Past Work', href: '#pastwork' }, { label: 'Skills', href: '#skills' } ],
   resume: { label: 'Resume', onClick: () => {} },
-  hero: { titleLine1: 'Creative Developer &', titleLine2Gradient: 'Digital Designer', subtitle: 'I craft beautiful digital experiences through code and design. Specializing in modern web development, UI/UX design, and bringing innovative ideas to life.', },
-  ctaButtons: { primary: { label: 'View My Work', onClick: () => {} }, secondary: { label: 'Get In Touch', onClick: () => {} }, },
+  hero: { titleLine1: 'Game Developer &', titleLine2Gradient: 'Scripter', subtitle: 'I create immersive gaming experiences and robust systems through advanced scripting. Specializing in Roblox development, game mechanics, and bringing innovative gameplay ideas to life.', },
+  ctaButtons: { primary: { label: 'View My Games', onClick: () => {} }, secondary: { label: 'Get In Touch', onClick: () => {} }, },
   games: [ 
-    { title: 'FinTech Mobile App', description: 'React Native app with AI-powered financial insights.', tags: ['React Native', 'Node.js'], mediaType: 'custom' as const, imageContent: undefined }, 
-    { title: 'Data Visualization Platform', description: 'Interactive dashboard for complex data analysis.', tags: ['D3.js', 'Python'], mediaType: 'custom' as const, imageContent: undefined }, 
-    { title: '3D Portfolio Site', description: 'Immersive WebGL experience with 3D elements.', tags: ['Three.js', 'WebGL'], mediaType: 'custom' as const, imageContent: undefined }, 
+    { 
+      title: 'Steal A Streamer [Demo Game]', 
+      description: 'Game fully scripted by me.', 
+      tags: ['Full Stack', 'Monetization', 'Game Systems'], 
+      mediaType: 'image' as const, 
+      mediaUrl: 'https://tr.rbxcdn.com/180DAY-473399814d57d63f73e44d7ba2d3bf46/768/432/Image/Webp/noFilter',
+      externalLink: 'https://www.roblox.com/games/78545085335980/Steal-a-Streamer'
+    }, 
+    { 
+      title: 'Miami 1986 [2.0M+ Visits]', 
+      description: 'Currently a scripter for the game.', 
+      tags: ['Systems', 'Core Scripter'], 
+      mediaType: 'image' as const, 
+      mediaUrl: 'https://tr.rbxcdn.com/180DAY-d3f26b91f5e7d83300fdcf44b4193da7/768/432/Image/Webp/noFilter',
+      externalLink: 'https://www.roblox.com/games/4780772099/Miami-1986'
+    }, 
+    { 
+      title: 'Oak Wood Equestrian [1.5M+ Visits]', 
+      description: 'Past scripter for the game.', 
+      tags: ['Systems', 'Scripter'], 
+      mediaType: 'image' as const, 
+      mediaUrl: 'https://tr.rbxcdn.com/180DAY-ba2f4a9fad1e3251400c6e238a97ffe9/768/432/Image/Webp/noFilter',
+      externalLink: 'https://www.roblox.com/games/13716884245/Oak-Wood-Equestrian-Version-1-OG'
+    },
+    { 
+      title: 'Upcoming Brainrot Game', 
+      description: 'Everything seen is scripted by me', 
+      tags: ['Brainrot', 'Systems', 'Monetization'], 
+      mediaType: 'youtube' as const, 
+      mediaUrl: 'JkuypVC5okQ',
+      externalLink: 'https://youtu.be/JkuypVC5okQ'
+    },
+    { 
+      title: 'Obscured', 
+      description: 'Fully scripted by me.', 
+      tags: ['Complete System', 'Advanced Mechanics'], 
+      mediaType: 'youtube' as const, 
+      mediaUrl: 'X2kgIgzRH2s',
+      externalLink: 'https://youtu.be/X2kgIgzRH2s'
+    },
+    { 
+      title: 'Smash Legends', 
+      description: 'Fully scripted by me.', 
+      tags: ['Combat', 'Character Systems'], 
+      mediaType: 'youtube' as const, 
+      mediaUrl: 'IXgdFqOi28Y',
+      externalLink: 'https://youtu.be/IXgdFqOi28Y'
+    }
   ],
   pastWork: [ 
-    { title: 'E-commerce Platform', description: 'Scalable online store solution.', tags: ['React', 'Node.js'], mediaType: 'custom' as const, imageContent: undefined }, 
-    { title: 'Mobile App', description: 'Cross-platform mobile application.', tags: ['React Native'], mediaType: 'custom' as const, imageContent: undefined }, 
+    { 
+      title: 'Exploding Star Skill', 
+      description: 'VFX, SFX and Animations not created by me, remake from heroes battlegrounds', 
+      tags: ['Combat', 'VFX', 'Skill System'], 
+      mediaType: 'youtube' as const, 
+      mediaUrl: 'qHOpq5fvPY8',
+      externalLink: 'https://youtu.be/qHOpq5fvPY8'
+    }, 
+    { 
+      title: 'Full Pet System', 
+      description: 'Including the inventory, equip functionality and pet hover/follow. Pet models are placeholder freemods', 
+      tags: ['Inventory', 'Systems', 'Pets'], 
+      mediaType: 'youtube' as const, 
+      mediaUrl: 'qVIv0Px6oPU',
+      externalLink: 'https://youtu.be/qVIv0Px6oPU'
+    },
+    { 
+      title: 'Pet Hatching/Rolling Animation', 
+      description: 'VFX and pet models are placeholder freemods, scripted by me.', 
+      tags: ['Animation', 'VFX', 'Monetization'], 
+      mediaType: 'youtube' as const, 
+      mediaUrl: '3tJj6wgwNrE',
+      externalLink: 'https://youtu.be/3tJj6wgwNrE'
+    },
+    { 
+      title: 'Lightning Skill with Map Destruction', 
+      description: 'VFX, SFX and Animations not created by me', 
+      tags: ['Physics', 'Combat', 'Destruction'], 
+      mediaType: 'youtube' as const, 
+      mediaUrl: 'kFlqp30BkyU',
+      externalLink: 'https://youtu.be/kFlqp30BkyU'
+    },
+    { 
+      title: 'Weapon Combat + Movement System', 
+      description: 'Complete combat system with advanced movement mechanics', 
+      tags: ['Combat', 'Movement', 'Weapons'], 
+      mediaType: 'youtube' as const, 
+      mediaUrl: 'vujfuxX9gUY',
+      externalLink: 'https://youtu.be/vujfuxX9gUY'
+    },
+    { 
+      title: 'Pathfinding System', 
+      description: 'Semi-advanced pathfinding system with visualiser', 
+      tags: ['Pathfinding', 'Systems'], 
+      mediaType: 'youtube' as const, 
+      mediaUrl: 'o1_icChz3MU',
+      externalLink: 'https://youtu.be/o1_icChz3MU'
+    }
   ],
-  stats: [ { value: '50+', label: 'Projects Completed' }, { value: '5+', label: 'Years Experience' }, { value: '15+', label: 'Happy Clients' }, ],
+  stats: [ { value: '10+', label: 'Games Worked On' }, { value: '6+', label: 'Custom Systems' }, { value: '4M+', label: 'Total Game Visits' }, ],
 };
 
 // --- PROJECT GALLERY COMPONENT ---
 const ProjectGallery: React.FC<{ projects: Project[]; title: string; id: string }> = ({ projects, title, id }) => {
-  const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
+  const [currentProjectIndex, setCurrentProjectIndex] = useState(projects.length);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const projectsPerView = 3;
+  
+  // Create infinite loop by tripling the array
+  const infiniteProjects = [...projects, ...projects, ...projects];
   
   const handlePrev = () => {
     if (isTransitioning) return;
     setIsTransitioning(true);
+    setCurrentProjectIndex(prev => prev - 1);
     setTimeout(() => {
-      setCurrentProjectIndex(prev => {
-        const newIndex = prev - 1;
-        return newIndex < 0 ? projects.length - 1 : newIndex;
+      setIsTransitioning(false);
+      // Reset to middle section if we've gone past the first clone
+      setCurrentProjectIndex(current => {
+        if (current <= 0) {
+          return projects.length;
+        }
+        return current;
       });
-      setTimeout(() => setIsTransitioning(false), 50);
     }, 300);
   };
   
   const handleNext = () => {
     if (isTransitioning) return;
     setIsTransitioning(true);
+    setCurrentProjectIndex(prev => prev + 1);
     setTimeout(() => {
-      setCurrentProjectIndex(prev => {
-        const newIndex = prev + 1;
-        return newIndex >= projects.length ? 0 : newIndex;
+      setIsTransitioning(false);
+      // Reset to middle section if we've gone past the last clone
+      setCurrentProjectIndex(current => {
+        if (current >= projects.length * 2) {
+          return projects.length;
+        }
+        return current;
       });
-      setTimeout(() => setIsTransitioning(false), 50);
     }, 300);
   };
   
-  const visibleProjects = [];
-  for (let i = 0; i < projectsPerView; i++) {
-    const index = (currentProjectIndex + i) % projects.length;
-    visibleProjects.push(projects[index]);
-  }
+  // Render card helper
+  const renderCard = (project: Project, index: number) => (
+    <div key={`${project.title}-${index}`} className="glass-card rounded-2xl p-6 text-left flex-shrink-0" style={{ width: 'calc(33.333% - 1rem)' }}>
+      <div className="project-image rounded-xl h-48 mb-4 overflow-hidden relative group">
+        {project.mediaType === 'image' && project.mediaUrl ? (
+          <img 
+            src={project.mediaUrl} 
+            alt={project.title}
+            className="w-full h-full object-cover"
+          />
+        ) : project.mediaType === 'youtube' && project.mediaUrl ? (
+          <iframe
+            src={`https://www.youtube.com/embed/${project.mediaUrl}`}
+            className="w-full h-full"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            {project.imageContent}
+          </div>
+        )}
+      </div>
+      
+      <div className="flex items-start justify-between mb-2">
+        <h3 className="text-lg font-medium text-card-foreground geist-font flex-1">{project.title}</h3>
+        {project.externalLink && (
+          <a
+            href={project.externalLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ml-2 p-1.5 glass-button rounded-lg hover:bg-white/10 transition-all"
+            aria-label="Open external link"
+          >
+            <ExternalLink className="w-4 h-4" />
+          </a>
+        )}
+      </div>
+      
+      <p className="text-muted-foreground text-sm inter-font mb-4">{project.description}</p>
+      <div className="flex flex-wrap gap-2">
+        {project.tags.map(tag => (
+          <span key={tag} className="skill-badge px-2 py-1 rounded text-xs text-muted-foreground">{tag}</span>
+        ))}
+      </div>
+    </div>
+  );
+  
+  // Calculate transform based on current index
+  const calculateTransform = () => {
+    const cardWidth = 33.333; // percentage
+    const gap = 1.5; // rem (gap-6 = 1.5rem)
+    return `translateX(calc(-${currentProjectIndex * cardWidth}% - ${currentProjectIndex * gap}rem))`;
+  };
 
   return (
     <div id={id} className="mb-16">
@@ -151,57 +302,15 @@ const ProjectGallery: React.FC<{ projects: Project[]; title: string; id: string 
           <ChevronRight className="w-5 h-5" />
         </button>
         
-        {/* Projects Grid */}
+        {/* Projects Strip Container */}
         <div className="overflow-hidden">
-          <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-300 ease-out ${
-            isTransitioning ? 'opacity-0 translate-x-8' : 'opacity-100 translate-x-0'
-          }`}>
-            {visibleProjects.map((project, index) => (
-              <div key={`${currentProjectIndex}-${index}`} className="glass-card rounded-2xl p-6 text-left">
-                <div className="project-image rounded-xl h-48 mb-4 overflow-hidden relative group">
-                  {project.mediaType === 'image' && project.mediaUrl ? (
-                    <img 
-                      src={project.mediaUrl} 
-                      alt={project.title}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : project.mediaType === 'youtube' && project.mediaUrl ? (
-                    <iframe
-                      src={`https://www.youtube.com/embed/${project.mediaUrl}`}
-                      className="w-full h-full"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      {project.imageContent}
-                    </div>
-                  )}
-                </div>
-                
-                <div className="flex items-start justify-between mb-2">
-                  <h3 className="text-lg font-medium text-card-foreground geist-font flex-1">{project.title}</h3>
-                  {project.externalLink && (
-                    <a
-                      href={project.externalLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="ml-2 p-1.5 glass-button rounded-lg hover:bg-white/10 transition-all"
-                      aria-label="Open external link"
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                    </a>
-                  )}
-                </div>
-                
-                <p className="text-muted-foreground text-sm inter-font mb-4">{project.description}</p>
-                <div className="flex flex-wrap gap-2">
-                  {project.tags.map(tag => (
-                    <span key={tag} className="skill-badge px-2 py-1 rounded text-xs text-muted-foreground">{tag}</span>
-                  ))}
-                </div>
-              </div>
-            ))}
+          <div 
+            className="flex gap-6 transition-transform duration-300 ease-in-out"
+            style={{
+              transform: calculateTransform()
+            }}
+          >
+            {infiniteProjects.map((project, index) => renderCard(project, index))}
           </div>
         </div>
       </div>
@@ -225,15 +334,42 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
   const { toast } = useToast();
   const [isDiscordAnimating, setIsDiscordAnimating] = useState(false);
 
-  const handleCopyDiscord = () => {
+  const handleCopyDiscord = async () => {
     if (discordUsername) {
-      navigator.clipboard.writeText(discordUsername);
-      setIsDiscordAnimating(true);
-      toast({
-        title: "Copied to clipboard!",
-        description: `Discord username: ${discordUsername}`,
-      });
-      setTimeout(() => setIsDiscordAnimating(false), 600);
+      try {
+        await navigator.clipboard.writeText(discordUsername);
+        setIsDiscordAnimating(true);
+        toast({
+          title: "Copied to clipboard!",
+          description: `Discord username: ${discordUsername}`,
+        });
+        setTimeout(() => setIsDiscordAnimating(false), 600);
+      } catch (error) {
+        // Fallback method using a temporary textarea
+        const textarea = document.createElement("textarea");
+        textarea.value = discordUsername;
+        textarea.style.position = "fixed"; // Prevent scrolling to the bottom
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        try {
+          document.execCommand("copy");
+          setIsDiscordAnimating(true);
+          toast({
+            title: "Copied to clipboard!",
+            description: `Discord username: ${discordUsername}`,
+          });
+          setTimeout(() => setIsDiscordAnimating(false), 600);
+        } catch {
+          toast({
+            title: "Failed to copy!",
+            description: "Please try again.",
+            variant: "destructive",
+          });
+        } finally {
+          document.body.removeChild(textarea);
+        }
+      }
     }
   };
   
@@ -254,7 +390,6 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
                         <a key={link.label} href={link.href} className="text-muted-foreground hover:text-foreground transition-colors inter-font text-sm">{link.label}</a>
                     ))}
                 </div>
-                <button onClick={resume.onClick} className="glass-button px-4 py-2 rounded-lg text-foreground text-sm font-medium inter-font">{resume.label}</button>
             </div>
         </nav>
         <div className="divider" />
