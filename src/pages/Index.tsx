@@ -1,47 +1,61 @@
-import { Home, Code2, Briefcase, Layers, MessageSquare } from "lucide-react";
-import { lazy, Suspense } from "react";
-import { NavBar } from "@/components/ui/tubelight-navbar";
-
-// Lazy load heavy components
-const Hero = lazy(() => import("@/components/Hero"));
-const Skills = lazy(() => import("@/components/Skills"));
-const Projects = lazy(() => import("@/components/Projects"));
-const Systems = lazy(() => import("@/components/Systems"));
-const Contact = lazy(() => import("@/components/Contact"));
-const Footer = lazy(() => import("@/components/Footer"));
+import { PortfolioPage, PortfolioPageProps } from "@/components/ui/starfall-portfolio-landing";
 
 const Index = () => {
-  const navItems = [
-    { name: 'Home', url: '#hero', icon: Home },
-    { name: 'Skills', url: '#skills', icon: Code2 },
-    { name: 'Projects', url: '#projects', icon: Briefcase },
-    { name: 'Systems', url: '#systems', icon: Layers },
-    { name: 'Contact', url: '#contact', icon: MessageSquare }
-  ];
+  const portfolioData: PortfolioPageProps = {
+    logo: {
+      initials: 'xo',
+      name: 'xo1o',
+    },
+    navLinks: [
+      { label: 'About', href: '#about' },
+      { label: 'Projects', href: '#projects' },
+      { label: 'Skills', href: '#skills' },
+    ],
+    resume: {
+      label: 'Resume',
+      onClick: () => window.open('#', '_blank'),
+    },
+    hero: {
+      titleLine1: 'Professional Roblox Scripter &',
+      titleLine2Gradient: 'Game Developer',
+      subtitle: "I'm xo1o, a professional Roblox scripter who specializes in simple, efficient Lua systems. I've been making dependable, well-optimized, and engagement-focused games for 3+ years.",
+    },
+    ctaButtons: {
+      primary: {
+        label: 'View My Work',
+        onClick: () => { document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' }); },
+      },
+      secondary: {
+        label: 'Get In Touch',
+        onClick: () => { document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' }); },
+      },
+    },
+    projects: [
+      { 
+        title: 'Game System', 
+        description: 'Advanced monetization and progression systems for high-retention gameplay.',
+        tags: ['Lua', 'Roblox Studio', 'DataStore'] 
+      },
+      { 
+        title: 'Combat Framework', 
+        description: 'Smooth and responsive combat system with hit detection and animations.',
+        tags: ['Lua', 'RemoteEvents', 'Animation'] 
+      },
+      { 
+        title: 'UI Systems', 
+        description: 'Intuitive and polished user interfaces for seamless player experience.',
+        tags: ['Lua', 'Roact', 'Spring Animation'] 
+      },
+    ],
+    stats: [
+      { value: '3+', label: 'Years Experience' },
+      { value: '50+', label: 'Projects Completed' },
+      { value: '100K+', label: 'Players Reached' },
+    ],
+    showAnimatedBackground: true,
+  };
 
-  return (
-    <div className="min-h-screen">
-      <NavBar items={navItems} />
-      <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div></div>}>
-        <Hero />
-      </Suspense>
-      <Suspense fallback={<div className="py-20"><div className="animate-pulse bg-muted/30 h-96 rounded-lg"></div></div>}>
-        <Skills />
-      </Suspense>
-      <Suspense fallback={<div className="py-20"><div className="animate-pulse bg-muted/30 h-96 rounded-lg"></div></div>}>
-        <Projects />
-      </Suspense>
-      <Suspense fallback={<div className="py-20"><div className="animate-pulse bg-muted/30 h-96 rounded-lg"></div></div>}>
-        <Systems />
-      </Suspense>
-      <Suspense fallback={<div className="py-20"><div className="animate-pulse bg-muted/30 h-96 rounded-lg"></div></div>}>
-        <Contact />
-      </Suspense>
-      <Suspense fallback={<div className="py-4"><div className="animate-pulse bg-muted/30 h-16 rounded-lg"></div></div>}>
-        <Footer />
-      </Suspense>
-    </div>
-  );
+  return <PortfolioPage {...portfolioData} />;
 };
 
 export default Index;
