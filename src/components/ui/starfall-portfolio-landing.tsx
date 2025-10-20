@@ -97,30 +97,30 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
   showAnimatedBackground = true,
 }) => {
   const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
-  const [slideDirection, setSlideDirection] = useState<'left' | 'right' | null>(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const projectsPerView = 3;
   
   const handlePrev = () => {
-    if (slideDirection) return;
-    setSlideDirection('right');
+    if (isTransitioning) return;
+    setIsTransitioning(true);
     setTimeout(() => {
       setCurrentProjectIndex(prev => {
         const newIndex = prev - 1;
         return newIndex < 0 ? projects.length - 1 : newIndex;
       });
-      setSlideDirection(null);
+      setTimeout(() => setIsTransitioning(false), 50);
     }, 300);
   };
   
   const handleNext = () => {
-    if (slideDirection) return;
-    setSlideDirection('left');
+    if (isTransitioning) return;
+    setIsTransitioning(true);
     setTimeout(() => {
       setCurrentProjectIndex(prev => {
         const newIndex = prev + 1;
         return newIndex >= projects.length ? 0 : newIndex;
       });
-      setSlideDirection(null);
+      setTimeout(() => setIsTransitioning(false), 50);
     }, 300);
   };
   
@@ -169,7 +169,7 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
                     {/* Navigation Buttons */}
                     <button
                         onClick={handlePrev}
-                        disabled={!!slideDirection}
+                        disabled={isTransitioning}
                         className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 z-10 glass-button w-10 h-10 rounded-full flex items-center justify-center disabled:opacity-50 transition-all hover:scale-110 active:scale-95"
                         aria-label="Previous projects"
                     >
@@ -178,7 +178,7 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
                     
                     <button
                         onClick={handleNext}
-                        disabled={!!slideDirection}
+                        disabled={isTransitioning}
                         className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 z-10 glass-button w-10 h-10 rounded-full flex items-center justify-center disabled:opacity-50 transition-all hover:scale-110 active:scale-95"
                         aria-label="Next projects"
                     >
@@ -187,10 +187,8 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
                     
                     {/* Projects Grid */}
                     <div className="overflow-hidden">
-                        <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 transition-transform duration-300 ease-out ${
-                            slideDirection === 'left' ? '-translate-x-12 opacity-0' : 
-                            slideDirection === 'right' ? 'translate-x-12 opacity-0' : 
-                            'translate-x-0 opacity-100'
+                        <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-300 ease-out ${
+                            isTransitioning ? 'opacity-0 translate-x-8' : 'opacity-100 translate-x-0'
                         }`}>
                             {visibleProjects.map((project, index) => (
                                 <div key={`${currentProjectIndex}-${index}`} className="glass-card rounded-2xl p-6 text-left">
