@@ -394,7 +394,7 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
   return (
     <div className="bg-background text-foreground geist-font w-full overflow-x-hidden">
       {showAnimatedBackground && <AuroraBackground />}
-      <div className="relative max-w-screen-xl mx-auto w-full">
+      <div className="relative max-w-screen-xl mx-auto w-full px-4 sm:px-6">
         <nav className="w-full px-4 sm:px-6 py-4">
             <div className="max-w-7xl mx-auto flex flex-col items-center gap-2 sm:gap-3 md:flex-row md:justify-between md:items-center">
                 <div className="flex items-center space-x-2">
@@ -423,7 +423,7 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
                         {hero.titleLine1}
                         <span className="gradient-text block tracking-tight">{hero.titleLine2Gradient}</span>
                     </h1>
-                    <p className="text-base sm:text-lg md:text-xl max-w-3xl leading-relaxed inter-font font-light text-muted-foreground mx-auto px-4">{hero.subtitle}</p>
+                    <p className="text-base sm:text-lg md:text-xl max-w-3xl leading-relaxed inter-font font-light text-muted-foreground mx-auto px-4 break-words">{hero.subtitle}</p>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
                     <button onClick={ctaButtons.primary.onClick} className="primary-button px-6 py-3 text-foreground rounded-lg font-medium text-sm min-w-[160px]">{ctaButtons.primary.label}</button>
