@@ -300,7 +300,7 @@ const ProjectGallery: React.FC<{ projects: Project[]; title: string; id: string 
   return (
     <div id={id} className="mb-12 sm:mb-16">
       <h2 className="text-2xl sm:text-3xl md:text-4xl font-light text-foreground mb-6 sm:mb-8 text-center geist-font tracking-tight px-4">{title}</h2>
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-8 lg:px-12">
+      <div className="relative max-w-6xl w-full mx-auto px-4 sm:px-8 lg:px-12">
         {/* Navigation Buttons */}
         <button
           onClick={handlePrev}
@@ -417,7 +417,7 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
         </nav>
         <div className="divider" />
         <main id="about" className="w-full min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 py-12 sm:py-20">
-            <div className="max-w-6xl mx-auto text-center">
+            <div className="max-w-6xl w-full mx-auto text-center">
                 <div className="mb-6 sm:mb-8 float-animation">
                     <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] geist-font font-light text-foreground tracking-tight mb-4 break-words">
                         {hero.titleLine1}
