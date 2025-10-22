@@ -1,5 +1,4 @@
 import { PortfolioPage, PortfolioPageProps } from "@/components/ui/starfall-portfolio-landing";
-import LoadingScreen from "@/components/ui/loading-screen";
 
 const Index = () => {
   const portfolioData: PortfolioPageProps = {
@@ -153,12 +152,7 @@ const Index = () => {
     showAnimatedBackground: true,
   };
 
-  return (
-    <>
-      <LoadingScreen />
-      <PortfolioPage {...portfolioData} />
-    </>
-  );
+  return <PortfolioPage {...portfolioData} />;
 };
 
 export default Index;
