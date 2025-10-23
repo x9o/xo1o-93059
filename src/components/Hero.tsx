@@ -1,5 +1,6 @@
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 import GradientText from "@/components/ui/gradient-text";
+import { SparklesCore } from "@/components/ui/sparkles";
 import { memo, useCallback } from "react";
 import { motion } from "framer-motion";
 
@@ -55,6 +56,24 @@ const Hero = memo(() => {
               </GradientText>
             </motion.div>
           </motion.h1>
+          
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.5 }}
+            className="relative w-full max-w-2xl mx-auto h-12 my-4"
+          >
+            <div className="absolute inset-0 blur-xl bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 animate-pulse" />
+            <SparklesCore
+              background="transparent"
+              minSize={0.4}
+              maxSize={1.2}
+              particleDensity={150}
+              className="w-full h-full"
+              particleColor="#8B5CF6"
+            />
+          </motion.div>
+          
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
