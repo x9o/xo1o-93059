@@ -1,5 +1,4 @@
 import { PortfolioPage, PortfolioPageProps } from "@/components/ui/starfall-portfolio-landing";
-import NeuralHero from "@/components/ui/neural-network-hero";
 
 const Index = () => {
   const portfolioData: PortfolioPageProps = {
@@ -153,22 +152,7 @@ const Index = () => {
     showAnimatedBackground: true,
   };
 
-  return (
-    <>
-      <NeuralHero 
-        title="xo1o — Lua Scripter & System Architect"
-        description="Crafting scalable, bug-free Roblox systems with precision and creativity. Specializing in game mechanics, monetization, and full-stack scripting."
-        badgeText="Roblox Developer"
-        badgeLabel="Professional"
-        ctaButtons={[
-          { text: "View My Work", href: "#games", primary: true },
-          { text: "Get In Touch", href: "#contact" }
-        ]}
-        microDetails={["3.5+ Years Experience", "4M+ Total Visits", "Full-Stack Systems"]}
-      />
-      <PortfolioPage {...portfolioData} />
-    </>
-  );
+  return <PortfolioPage {...portfolioData} />;
 };
 
 export default Index;
