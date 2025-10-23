@@ -23,6 +23,7 @@ export interface PortfolioPageProps {
   resume?: { label: string; onClick?: () => void; };
   hero?: { titleLine1: React.ReactNode; titleLine2Gradient: React.ReactNode; subtitle: React.ReactNode; };
   ctaButtons?: { primary: { label: string; onClick?: () => void; }; secondary: { label: string; onClick?: () => void; }; };
+  whyMe?: string[];
   games?: Project[];
   pastWork?: Project[];
   stats?: Stat[];
@@ -344,6 +345,7 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
   resume = defaultData.resume,
   hero = defaultData.hero,
   ctaButtons = defaultData.ctaButtons,
+  whyMe,
   games = defaultData.games,
   pastWork = defaultData.pastWork,
   stats = defaultData.stats,
@@ -452,6 +454,26 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
                     <button onClick={ctaButtons.secondary.onClick} className="glass-button min-w-[160px] inter-font text-sm font-medium text-foreground rounded-lg px-6 py-3">{ctaButtons.secondary.label}</button>
                 </div>
                 <div className="divider mb-16" />
+                
+                {/* Why Me Section */}
+                {whyMe && whyMe.length > 0 && (
+                  <>
+                    <div className="mb-12 sm:mb-16">
+                      <h2 className="text-2xl sm:text-3xl md:text-4xl font-light text-foreground mb-6 sm:mb-8 text-center geist-font tracking-tight px-4">Why Me?</h2>
+                      <div className="glass-card rounded-2xl p-6 sm:p-8 max-w-3xl mx-auto">
+                        <ul className="space-y-4 text-left">
+                          {whyMe.map((point, index) => (
+                            <li key={index} className="flex items-start gap-3">
+                              <span className="text-primary mt-1 flex-shrink-0">•</span>
+                              <span className="text-muted-foreground inter-font text-sm sm:text-base">{point}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                    <div className="divider mb-16" />
+                  </>
+                )}
                 
                 {/* Games Gallery */}
                 {games && games.length > 0 && <ProjectGallery projects={games} title="Games" id="games" />}

@@ -39,6 +39,13 @@ const Index = () => {
         onClick: () => { document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); },
       },
     },
+    whyMe: [
+      '3.5 years of experience scripting in Luau.',
+      'Strong problem-solving skills and efficient debugging.',
+      'Flexible and able to adapt to different projects.',
+      'Easy to communicate and collaborate with.',
+      'Committed to exceeding your expectations.',
+    ],
     games: [
       { 
         title: 'Steal A Streamer [Demo Game]', 
