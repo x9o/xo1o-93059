@@ -3,7 +3,6 @@ import * as THREE from 'three';
 import { ChevronLeft, ChevronRight, ExternalLink, Copy } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { SparklesCore } from '@/components/ui/sparkles';
-import { FeaturesSectionWithHoverEffects } from '@/components/ui/feature-section-with-hover-effects';
 
 // --- TYPE DEFINITIONS FOR PROPS ---
 interface NavLink { label: string; href: string; }
@@ -461,7 +460,16 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
                   <>
                     <div className="mb-12 sm:mb-16">
                       <h2 className="text-2xl sm:text-3xl md:text-4xl font-light text-foreground mb-6 sm:mb-8 text-center geist-font tracking-tight px-4">Why Me?</h2>
-                      <FeaturesSectionWithHoverEffects />
+                      <div className="glass-card rounded-2xl p-6 sm:p-8 max-w-3xl mx-auto">
+                        <ul className="space-y-4 text-left">
+                          {whyMe.map((point, index) => (
+                            <li key={index} className="flex items-start gap-3">
+                              <span className="text-primary mt-1 flex-shrink-0">•</span>
+                              <span className="text-muted-foreground inter-font text-sm sm:text-base">{point}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
                     <div className="divider mb-16" />
                   </>
