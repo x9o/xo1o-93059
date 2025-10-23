@@ -419,12 +419,14 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
         <div className="divider" />
         <main id="about" className="w-full min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 py-12 sm:py-20">
             <div className="max-w-6xl w-full mx-auto text-center">
-                <div className="mb-6 sm:mb-8 float-animation">
-                    <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] geist-font font-light text-foreground tracking-tight mb-4 break-words">
-                        {hero.titleLine1}
-                        <span className="gradient-text block tracking-tight">{hero.titleLine2Gradient}</span>
-                    </h1>
-                    {/* Sparkles + neon glow between header and subtitle */}
+                    <div className="mb-6 sm:mb-8">
+                        <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] geist-font font-light text-foreground tracking-tight mb-4 break-words">
+                            {hero.titleLine1}
+                            <span className="gradient-text block tracking-tight">{hero.titleLine2Gradient}</span>
+                        </h1>
+                        <p className="text-base sm:text-lg md:text-xl max-w-3xl leading-relaxed inter-font font-light text-muted-foreground mx-auto px-4 break-words">{hero.subtitle}</p>
+                    </div>
+                    {/* Sparkles + neon glow moved under description */}
                     <div className="relative w-full max-w-3xl h-16 mx-auto my-6">
                       {/* Neon gradient lines */}
                       <div className="absolute inset-x-10 top-0 h-[2px] bg-gradient-to-r from-transparent via-primary/60 to-transparent blur-sm" />
@@ -446,9 +448,6 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
                       {/* Radial fade to soften edges */}
                       <div className="pointer-events-none absolute inset-0 bg-background [mask-image:radial-gradient(500px_120px_at_center,transparent_25%,black)]" />
                     </div>
-
-                    <p className="text-base sm:text-lg md:text-xl max-w-3xl leading-relaxed inter-font font-light text-muted-foreground mx-auto px-4 break-words">{hero.subtitle}</p>
-                </div>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
                     <button onClick={ctaButtons.primary.onClick} className="primary-button px-6 py-3 text-foreground rounded-lg font-medium text-sm min-w-[160px]">{ctaButtons.primary.label}</button>
                     <button onClick={ctaButtons.secondary.onClick} className="glass-button min-w-[160px] inter-font text-sm font-medium text-foreground rounded-lg px-6 py-3">{ctaButtons.secondary.label}</button>
