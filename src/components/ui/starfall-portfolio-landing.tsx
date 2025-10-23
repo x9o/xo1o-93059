@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { ChevronLeft, ChevronRight, ExternalLink, Copy } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { SparklesCore } from '@/components/ui/sparkles';
 
 // --- TYPE DEFINITIONS FOR PROPS ---
 interface NavLink { label: string; href: string; }
@@ -423,6 +424,29 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
                         {hero.titleLine1}
                         <span className="gradient-text block tracking-tight">{hero.titleLine2Gradient}</span>
                     </h1>
+                    {/* Sparkles + neon glow between header and subtitle */}
+                    <div className="relative w-full max-w-3xl h-16 mx-auto my-6">
+                      {/* Neon gradient lines */}
+                      <div className="absolute inset-x-10 top-0 h-[2px] bg-gradient-to-r from-transparent via-primary/60 to-transparent blur-sm" />
+                      <div className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+                      <div className="absolute inset-x-24 top-0 h-[5px] bg-gradient-to-r from-transparent via-accent/50 to-transparent blur-sm" />
+                      <div className="absolute inset-x-24 top-0 h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
+
+                      {/* Sparkles */}
+                      <SparklesCore
+                        background="transparent"
+                        minSize={0.6}
+                        maxSize={1.6}
+                        particleDensity={220}
+                        className="w-full h-full"
+                        particleColor="#ffffff"
+                        speed={1.2}
+                      />
+
+                      {/* Radial fade to soften edges */}
+                      <div className="pointer-events-none absolute inset-0 bg-background [mask-image:radial-gradient(500px_120px_at_center,transparent_25%,black)]" />
+                    </div>
+
                     <p className="text-base sm:text-lg md:text-xl max-w-3xl leading-relaxed inter-font font-light text-muted-foreground mx-auto px-4 break-words">{hero.subtitle}</p>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
