@@ -149,7 +149,7 @@ const Index = () => {
       { value: '4M+', label: 'Visits Contributed' },
     ],
     discordUsername: 'xo1o',
-    showAnimatedBackground: true,
+    showAnimatedBackground: false,
   };
 
   return <PortfolioPage {...portfolioData} />;

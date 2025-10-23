@@ -1,4 +1,3 @@
-import AnoAI from "@/components/ui/animated-shader-background";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 import GradientText from "@/components/ui/gradient-text";
 import { memo, useCallback } from "react";
@@ -17,7 +16,6 @@ const Hero = memo(() => {
 
   return (
     <section id="hero" className="relative min-h-screen bg-black">
-      <AnoAI />
       <div className="absolute inset-0 flex flex-col items-center justify-center z-20 px-4">
         <div className="text-center space-y-6 w-full">
           <motion.h1 
