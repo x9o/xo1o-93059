@@ -394,7 +394,6 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
   
   return (
     <div className="bg-background text-foreground geist-font w-full overflow-x-hidden">
-      {showAnimatedBackground && <AuroraBackground />}
       <div className="relative max-w-screen-xl mx-auto w-full px-4 sm:px-6">
         <nav className="w-full px-4 sm:px-6 py-4">
             <div className="max-w-7xl mx-auto flex flex-col items-center gap-2 sm:gap-3 md:flex-row md:justify-between md:items-center">

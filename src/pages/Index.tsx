@@ -1,5 +1,6 @@
 import { PortfolioPage, PortfolioPageProps } from "@/components/ui/starfall-portfolio-landing";
 
+
 const Index = () => {
   const portfolioData: PortfolioPageProps = {
     logo: {
@@ -13,9 +14,20 @@ const Index = () => {
     ],
     hero: {
       titleLine1: "xo1o's Portfolio",
-      titleLine2Gradient: 'Professional Scripter',
-      subtitle: "I'm a passionate scripter who creates the scalable and bug-free Lua code that powers Roblox games.  My area of expertise is turning intricate design ideas into systems that are clean, effective, and maintainable."
-      
+      titleLine2Gradient: (
+        <span
+          style={{
+            background: 'linear-gradient(90deg, transparent 0%, #2CA1B7 50%, transparent 100%)',
+            WebkitBackgroundClip: 'text',
+            backgroundClip: 'text',
+            color: 'transparent',
+          }}
+        >
+          Professional Scripter
+        </span>
+      ),
+      subtitle: "Helping you bring your game ideas to life with advanced scripting services.",
+
     },
     ctaButtons: {
       primary: {
@@ -149,10 +161,15 @@ const Index = () => {
       { value: '4M+', label: 'Visits Contributed' },
     ],
     discordUsername: 'xo1o',
-    showAnimatedBackground: false,
+    showAnimatedBackground: true,
   };
 
-  return <PortfolioPage {...portfolioData} />;
+  return (
+    <>
+   
+      <PortfolioPage {...portfolioData} />
+    </>
+  );
 };
 
 export default Index;
