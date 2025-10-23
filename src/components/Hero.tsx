@@ -61,17 +61,30 @@ const Hero = memo(() => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.5 }}
-            className="relative w-full max-w-2xl mx-auto h-12 my-4"
+            className="relative w-full max-w-3xl mx-auto h-32 my-8"
           >
-            <div className="absolute inset-0 blur-xl bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 animate-pulse" />
+            {/* Neon glow gradients */}
+            <div className="absolute left-20 right-20 top-0 h-[2px] bg-gradient-to-r from-transparent via-blue-500 to-transparent blur-sm" />
+            <div className="absolute left-20 right-20 top-0 h-px bg-gradient-to-r from-transparent via-blue-500 to-transparent" />
+            <div className="absolute left-40 right-40 top-0 h-[5px] bg-gradient-to-r from-transparent via-purple-500 to-transparent blur-sm" />
+            <div className="absolute left-40 right-40 top-0 h-px bg-gradient-to-r from-transparent via-purple-500 to-transparent" />
+            
+            {/* Background glow */}
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/20 to-pink-500/10 blur-2xl" />
+            
+            {/* Sparkles */}
             <SparklesCore
               background="transparent"
-              minSize={0.4}
-              maxSize={1.2}
-              particleDensity={150}
+              minSize={0.6}
+              maxSize={2}
+              particleDensity={200}
               className="w-full h-full"
-              particleColor="#8B5CF6"
+              particleColor="#A78BFA"
+              speed={2}
             />
+            
+            {/* Radial fade */}
+            <div className="absolute inset-0 bg-black [mask-image:radial-gradient(500px_150px_at_center,transparent_20%,black)]" />
           </motion.div>
           
           <motion.p
