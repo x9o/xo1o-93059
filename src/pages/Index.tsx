@@ -40,11 +40,10 @@ const Index = () => {
       },
     },
     whyMe: [
-      '3.5 years of experience scripting in Luau.',
-      'Strong problem-solving skills and efficient debugging.',
-      'Flexible and able to adapt to different projects.',
-      'Easy to communicate and collaborate with.',
-      'Committed to exceeding your expectations.',
+      '3.5 years of experience scripting in languages like Luau, Python, Javascript, C++, etc.',
+      'Can script a large variety of genre like simulator horror or combat games.',
+      'Always active and ready for work. Easy to communicate and collaborate with.',
+      'Offering high-quality development at competitive market rates.',
     ],
     games: [
       { 
@@ -113,6 +112,14 @@ const Index = () => {
       },
     ],
     pastWork: [
+      { 
+        title: 'UI + Dialogue Animations', 
+        description: 'Satisfying UI animations and sounds. Dialogue system inspired by grow a garden.', 
+        tags: ['UI'], 
+        mediaType: 'youtube',
+        mediaUrl: '-Gu-dhytVR8',
+        externalLink: 'https://youtu.be/-Gu-dhytVR8',
+      }, 
       { 
         title: 'Exploding Star Skill', 
         description: 'VFX, SFX and Animations not created by me, remake from heroes battlegrounds', 
