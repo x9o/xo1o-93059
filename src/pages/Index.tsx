@@ -70,6 +70,15 @@ const Index = () => {
         mediaUrl: 'https://tr.rbxcdn.com/180DAY-ba2f4a9fad1e3251400c6e238a97ffe9/768/432/Image/Webp/noFilter',
         externalLink: 'https://www.roblox.com/games/13716884245/Oak-Wood-Equestrian-Version-1-OG',
       },
+      
+       { 
+        title: 'Rat Battles [Unreleased]', 
+        description: 'Systems refiner', 
+        tags: ['Scripter'], 
+        mediaType: 'image',
+        mediaUrl: 'https://tr.rbxcdn.com/180DAY-6a298e5126a58974662ee608b60a24b9/256/256/Image/Webp/noFilter',
+        externalLink: 'https://www.roblox.com/games/105408622025169/Rat-Battles',
+      },
       { 
         title: 'Upcoming Brainrot Game', 
         description: 'Mechanics scripted include: Egg restock and shop system, brainrot inventory and placing, money + offline earnings, trading system, selling brainrots, and a mutation system through the slap tool.', 
