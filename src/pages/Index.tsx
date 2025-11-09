@@ -47,7 +47,7 @@ const Index = () => {
     ],
     games: [
       { 
-        title: 'Steal A Streamer [Demo Game]', 
+        title: 'Steal A Streamer', 
         description: 'Steal a brainrot clone. I scripted the the entire game, including mechanics like stealing, guaranteed drops, monetisaion, the base system, and much more.', 
         tags: ['Full Stack', 'Monetization', 'Game Systems'], 
         mediaType: 'image',
@@ -55,7 +55,15 @@ const Index = () => {
         externalLink: 'https://www.roblox.com/games/78545085335980/Steal-a-Streamer',
       }, 
       { 
-        title: 'Miami 1986 [2.0M+ Visits]', 
+        title: 'Fish And Hatch A Brainrot', 
+        description: 'New upcoming game', 
+        tags: ['Full Stack'], 
+        mediaType: 'image',
+        mediaUrl: 'https://tr.rbxcdn.com/180DAY-3e7a2a3d42fa03bf45571599f3328c13/768/432/Image/Webp/noFilter',
+        externalLink: 'https://www.roblox.com/',
+      }, 
+      { 
+        title: 'Miami 1986', 
         description: 'Currently a scripter for the game. Created an efficient job entry system, with a modular checkpoint system and job tiers, currently refactoring lobby system.', 
         tags: ['Systems', 'Core Scripter'], 
         mediaType: 'image',
@@ -63,7 +71,7 @@ const Index = () => {
         externalLink: 'https://www.roblox.com/games/4780772099/Miami-1986',
       }, 
       { 
-        title: 'Oak Wood Equestrian [1.5M+ Visits]', 
+        title: 'Oak Wood Equestrian', 
         description: 'Past scripter for the game. Worked on the shop and NPC dialogue system', 
         tags: ['Systems', 'Scripter'], 
         mediaType: 'image',
@@ -72,7 +80,7 @@ const Index = () => {
       },
       
        { 
-        title: 'Rat Battles [Unreleased]', 
+        title: 'Rat Battles', 
         description: 'Systems refiner', 
         tags: ['Scripter'], 
         mediaType: 'image',
