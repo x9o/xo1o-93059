@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { ChevronLeft, ChevronRight, ExternalLink, Copy } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ExternalLink, Copy, Clock, FileCode, Palette, DollarSign, Smartphone } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { SparklesCore } from '@/components/ui/sparkles';
 
@@ -16,6 +16,11 @@ interface Project {
   externalLink?: string;
 }
 interface Stat { value: string; label: string; }
+interface DeliverableCard {
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+}
 
 export interface PortfolioPageProps {
   logo?: { initials: React.ReactNode; name: React.ReactNode; };
@@ -23,7 +28,7 @@ export interface PortfolioPageProps {
   resume?: { label: string; onClick?: () => void; };
   hero?: { titleLine1: React.ReactNode; titleLine2Gradient: React.ReactNode; subtitle: React.ReactNode; };
   ctaButtons?: { primary: { label: string; onClick?: () => void; }; secondary: { label: string; onClick?: () => void; }; };
-  whyMe?: string[];
+  deliverables?: DeliverableCard[];
   games?: Project[];
   pastWork?: Project[];
   stats?: Stat[];
@@ -345,7 +350,7 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
   resume = defaultData.resume,
   hero = defaultData.hero,
   ctaButtons = defaultData.ctaButtons,
-  whyMe,
+  deliverables,
   games = defaultData.games,
   pastWork = defaultData.pastWork,
   stats = defaultData.stats,
@@ -455,20 +460,24 @@ const PortfolioPage: React.FC<PortfolioPageProps> = ({
                 </div>
                 <div className="divider mb-16" />
                 
-                {/* Why Me Section */}
-                {whyMe && whyMe.length > 0 && (
+                {/* What I Deliver Section */}
+                {deliverables && deliverables.length > 0 && (
                   <>
                     <div className="mb-12 sm:mb-16">
-                      <h2 className="text-2xl sm:text-3xl md:text-4xl font-light text-foreground mb-6 sm:mb-8 text-center geist-font tracking-tight px-4">Why Me?</h2>
-                      <div className="glass-card rounded-2xl p-6 sm:p-8 max-w-3xl mx-auto">
-                        <ul className="space-y-4 text-left">
-                          {whyMe.map((point, index) => (
-                            <li key={index} className="flex items-start gap-3">
-                              <span className="text-primary mt-1 flex-shrink-0">•</span>
-                              <span className="text-muted-foreground inter-font text-sm sm:text-base">{point}</span>
-                            </li>
-                          ))}
-                        </ul>
+                      <h2 className="text-2xl sm:text-3xl md:text-4xl font-light text-foreground mb-6 sm:mb-8 text-center geist-font tracking-tight px-4">What I Deliver</h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-6xl mx-auto px-4">
+                        {deliverables.map((item, index) => (
+                          <div 
+                            key={index}
+                            className="glass-card rounded-xl p-6 text-left transition-all duration-300 hover:scale-105 hover:shadow-lg group cursor-default"
+                          >
+                            <div className="mb-4 text-primary transition-transform duration-300 group-hover:scale-110">
+                              {item.icon}
+                            </div>
+                            <h3 className="text-lg font-semibold text-foreground mb-2 geist-font">{item.title}</h3>
+                            <p className="text-muted-foreground text-sm inter-font">{item.description}</p>
+                          </div>
+                        ))}
                       </div>
                     </div>
                     <div className="divider mb-16" />

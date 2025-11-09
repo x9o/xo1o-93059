@@ -1,4 +1,5 @@
 import { PortfolioPage, PortfolioPageProps } from "@/components/ui/starfall-portfolio-landing";
+import { Clock, FileCode, Palette, DollarSign, Smartphone } from 'lucide-react';
 
 
 const Index = () => {
@@ -39,11 +40,32 @@ const Index = () => {
         onClick: () => { document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); },
       },
     },
-    whyMe: [
-      '3.5 years of experience scripting in languages like Luau, Python, Javascript, C++, etc.',
-      'Can script a large variety of genre like simulator horror or combat games.',
-      'Always active and ready for work. Easy to communicate and collaborate with.',
-      'Offering high-quality development at competitive market rates.',
+    deliverables: [
+      {
+        title: 'Full-stack game loops',
+        description: '7-14 day builds',
+        icon: <Clock className="w-8 h-8" />,
+      },
+      {
+        title: 'Clean, documented code',
+        description: 'Easy to customize',
+        icon: <FileCode className="w-8 h-8" />,
+      },
+      {
+        title: 'Reskin-ready architecture',
+        description: 'Swap themes in <2 hours',
+        icon: <Palette className="w-8 h-8" />,
+      },
+      {
+        title: 'Monetization systems',
+        description: 'Pre-integrated',
+        icon: <DollarSign className="w-8 h-8" />,
+      },
+      {
+        title: 'Mobile-optimized UI/UX',
+        description: 'Responsive design',
+        icon: <Smartphone className="w-8 h-8" />,
+      },
     ],
     games: [
       { 
