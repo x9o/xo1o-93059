@@ -110,7 +110,7 @@ const Index = () => {
         externalLink: 'https://www.roblox.com/games/105408622025169/Rat-Battles',
       },
       { 
-        title: 'Upcoming Brainrot Game', 
+        title: 'Slap a Brainrot', 
         description: 'Mechanics scripted include: Egg restock and shop system, brainrot inventory and placing, money + offline earnings, trading system, selling brainrots, and a mutation system through the slap tool.', 
         tags: ['Brainrot', 'Systems', 'Monetization'], 
         mediaType: 'youtube',
