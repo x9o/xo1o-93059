@@ -38,7 +38,7 @@ const releasedGames = [
 
 const unreleasedGames = [
   {
-    title: "Upcoming Brainrot Game",
+    title: "Slap a Brainrot",
     description: "Everything seen is scripted by me",
     role: "Full Development",
     tags: ["Brainrot", "Systems", "Monetization"],
