@@ -95,61 +95,68 @@ const extractPlaceId = (url: string): string | null => {
   return match ? match[1] : null;
 };
 
-const VisitsBadge = ({ gameLink }: { gameLink: string }) => {
-  const [visits, setVisits] = useState<number | null>(null);
-  const [loading, setLoading] = useState(true);
+const Projects = memo(() => {
+  const [visitsData, setVisitsData] = useState<Record<string, number>>({});
 
   useEffect(() => {
-    const fetchVisits = async () => {
+    const fetchAllVisits = async () => {
       try {
-        const placeId = extractPlaceId(gameLink);
-        if (!placeId) {
-          setLoading(false);
-          return;
-        }
-
-        // Get universe ID from place ID
-        const universeResponse = await fetch(
-          `https://apis.roblox.com/universes/v1/places/${placeId}/universe`
+        // Get all released games with Roblox links
+        const robloxGames = releasedGames.filter(
+          (game) => game.link.includes('roblox.com/games')
         );
-        const universeData = await universeResponse.json();
-        const universeId = universeData.universeId;
 
-        if (!universeId) {
-          setLoading(false);
-          return;
-        }
+        // Extract place IDs
+        const placeIds = robloxGames
+          .map((game) => extractPlaceId(game.link))
+          .filter((id): id is string => id !== null);
 
-        // Get game data with visits
+        if (placeIds.length === 0) return;
+
+        // Fetch universe IDs for all place IDs
+        const universePromises = placeIds.map((placeId) =>
+          fetch(`https://apis.roblox.com/universes/v1/places/${placeId}/universe`)
+            .then((res) => res.json())
+            .then((data) => ({ placeId, universeId: data.universeId }))
+        );
+
+        const universeResults = await Promise.all(universePromises);
+        const validUniverseIds = universeResults
+          .filter((result) => result.universeId)
+          .map((result) => result.universeId);
+
+        if (validUniverseIds.length === 0) return;
+
+        // Fetch all game data at once
         const gameResponse = await fetch(
-          `https://games.roblox.com/v1/games?universeIds=${universeId}`
+          `https://games.roblox.com/v1/games?universeIds=${validUniverseIds.join(',')}`
         );
         const gameData = await gameResponse.json();
 
-        if (gameData.data && gameData.data[0]) {
-          setVisits(gameData.data[0].visits);
-        }
+        // Map universe IDs back to place IDs and then to game links
+        const visitsMap: Record<string, number> = {};
+        gameData.data?.forEach((game: any) => {
+          const universeResult = universeResults.find(
+            (result) => result.universeId === game.id
+          );
+          if (universeResult) {
+            const matchingGame = robloxGames.find(
+              (g) => extractPlaceId(g.link) === universeResult.placeId
+            );
+            if (matchingGame) {
+              visitsMap[matchingGame.link] = game.visits;
+            }
+          }
+        });
+
+        setVisitsData(visitsMap);
       } catch (error) {
-        console.error("Failed to fetch visits:", error);
-      } finally {
-        setLoading(false);
+        console.error('Failed to fetch visits:', error);
       }
     };
 
-    fetchVisits();
-  }, [gameLink]);
-
-  if (loading || visits === null) return null;
-
-  return (
-    <Badge variant="default" className="text-sm font-bold gap-1.5 px-3 py-1">
-      <Eye className="h-4 w-4" />
-      {formatVisits(visits)} visits
-    </Badge>
-  );
-};
-
-const Projects = memo(() => {
+    fetchAllVisits();
+  }, []);
   return (
     <section className="py-20 px-4 bg-black" id="projects">
       <div className="container mx-auto">
@@ -185,6 +192,14 @@ const Projects = memo(() => {
                       <VideoPlayer src={game.videoUrl} />
                     </div>
                   )}
+                  {'imageUrl' in game && game.imageUrl && visitsData[game.link] && (
+                    <div className="absolute top-4 right-4 z-10">
+                      <Badge variant="default" className="text-sm font-bold gap-1.5 px-3 py-1.5 bg-primary/90 backdrop-blur-sm">
+                        <Eye className="h-4 w-4" />
+                        {formatVisits(visitsData[game.link])} visits
+                      </Badge>
+                    </div>
+                  )}
                   <CardHeader>
                     <div className="flex items-start justify-between mb-2">
                       <CardTitle className="text-xl transition-colors">
@@ -200,11 +215,6 @@ const Projects = memo(() => {
                         <ExternalLink className="h-5 w-5 text-muted-foreground transition-colors cursor-pointer" />
                       </a>
                     </div>
-                    {'imageUrl' in game && game.imageUrl && game.link.includes('roblox.com/games') && (
-                      <div className="mb-3">
-                        <VisitsBadge gameLink={game.link} />
-                      </div>
-                    )}
                     <CardDescription>
                       {game.description}
                     </CardDescription>
