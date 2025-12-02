@@ -321,15 +321,6 @@ const ProjectGallery: React.FC<{ projects: Project[]; title: string; id: string 
   const renderCard = (project: Project, index: number) => (
     <div key={`${project.title}-${index}`} className="glass-card rounded-2xl p-4 sm:p-6 text-left flex-shrink-0 w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-1rem)]">
       <div className="project-image rounded-xl h-40 sm:h-48 mb-4 overflow-hidden relative group">
-        {/* Visits Badge */}
-        {project.externalLink && visitsData[project.externalLink] && (
-          <div className="absolute top-3 right-3 z-10">
-            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-primary/90 backdrop-blur-sm rounded-full text-primary-foreground text-sm font-bold shadow-lg">
-              <Eye className="w-4 h-4" />
-              {formatVisits(visitsData[project.externalLink])} visits
-            </div>
-          </div>
-        )}
         {project.mediaType === 'image' && project.mediaUrl ? (
           <img 
             src={project.mediaUrl} 
@@ -364,6 +355,14 @@ const ProjectGallery: React.FC<{ projects: Project[]; title: string; id: string 
           </a>
         )}
       </div>
+
+      {/* Visits Badge - below title */}
+      {project.externalLink && visitsData[project.externalLink] && (
+        <div className="flex items-center gap-1.5 mb-3 px-3 py-1.5 glass-button rounded-lg w-fit text-sm font-medium text-primary">
+          <Eye className="w-4 h-4" />
+          <span>{formatVisits(visitsData[project.externalLink])} visits</span>
+        </div>
+      )}
       
       <p className="text-muted-foreground text-sm inter-font mb-4">{project.description}</p>
       <div className="flex flex-wrap gap-2">
