@@ -236,9 +236,12 @@ const ProjectGallery: React.FC<{ projects: Project[]; title: string; id: string 
 
         if (placeIds.length === 0) return;
 
+        // Use CORS proxy for Roblox API requests
+        const proxyUrl = (url: string) => `https://corsproxy.io/?${encodeURIComponent(url)}`;
+
         // Fetch universe IDs
         const universePromises = placeIds.map((placeId) =>
-          fetch(`https://apis.roblox.com/universes/v1/places/${placeId}/universe`)
+          fetch(proxyUrl(`https://apis.roblox.com/universes/v1/places/${placeId}/universe`))
             .then((res) => res.json())
             .then((data) => ({ placeId, universeId: data.universeId }))
             .catch(() => ({ placeId, universeId: null }))
@@ -253,7 +256,7 @@ const ProjectGallery: React.FC<{ projects: Project[]; title: string; id: string 
 
         // Fetch game data
         const gameResponse = await fetch(
-          `https://games.roblox.com/v1/games?universeIds=${validUniverseIds.join(',')}`
+          proxyUrl(`https://games.roblox.com/v1/games?universeIds=${validUniverseIds.join(',')}`)
         );
         const gameData = await gameResponse.json();
 
