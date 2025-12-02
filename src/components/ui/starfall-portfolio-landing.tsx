@@ -7,9 +7,9 @@ import { SparklesCore } from '@/components/ui/sparkles';
 // Helper functions for Roblox visit counts
 const formatVisits = (visits: number): string => {
   if (visits >= 1000000) {
-    return `${(visits / 1000000).toFixed(1)}M`;
+    return `${(visits / 1000000).toFixed(1)}m`;
   } else if (visits >= 1000) {
-    return `${(visits / 1000).toFixed(1)}K`;
+    return `${(visits / 1000).toFixed(1)}k`;
   }
   return visits.toString();
 };
@@ -211,6 +211,8 @@ const ProjectGallery: React.FC<{ projects: Project[]; title: string; id: string 
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
   const [visitsData, setVisitsData] = useState<Record<string, number>>({});
+  const [playingData, setPlayingData] = useState<Record<string, number>>({});
+  const [metricsUnavailable, setMetricsUnavailable] = useState(false);
   
   useEffect(() => {
     const checkViewport = () => {
@@ -236,13 +238,22 @@ const ProjectGallery: React.FC<{ projects: Project[]; title: string; id: string 
 
         if (placeIds.length === 0) return;
 
-        // Use CORS proxy for Roblox API requests
         const proxyUrl = (url: string) => `https://corsproxy.io/?${encodeURIComponent(url)}`;
+        const fetchWithFallback = async (url: string) => {
+          try {
+            const res = await fetch(url);
+            if (!res.ok) throw new Error(`Status ${res.status}`);
+            return await res.json();
+          } catch (err) {
+            const proxied = await fetch(proxyUrl(url));
+            if (!proxied.ok) throw new Error(`Proxy status ${proxied.status}`);
+            return proxied.json();
+          }
+        };
 
         // Fetch universe IDs
         const universePromises = placeIds.map((placeId) =>
-          fetch(proxyUrl(`https://apis.roblox.com/universes/v1/places/${placeId}/universe`))
-            .then((res) => res.json())
+          fetchWithFallback(`https://apis.roblox.com/universes/v1/places/${placeId}/universe`)
             .then((data) => ({ placeId, universeId: data.universeId }))
             .catch(() => ({ placeId, universeId: null }))
         );
@@ -255,13 +266,13 @@ const ProjectGallery: React.FC<{ projects: Project[]; title: string; id: string 
         if (validUniverseIds.length === 0) return;
 
         // Fetch game data
-        const gameResponse = await fetch(
-          proxyUrl(`https://games.roblox.com/v1/games?universeIds=${validUniverseIds.join(',')}`)
+        const gameData = await fetchWithFallback(
+          `https://games.roblox.com/v1/games?universeIds=${validUniverseIds.join(',')}`
         );
-        const gameData = await gameResponse.json();
 
         const visitsMap: Record<string, number> = {};
-        gameData.data?.forEach((game: { id: number; visits: number }) => {
+        const playingMap: Record<string, number> = {};
+        gameData.data?.forEach((game: { id: number; visits: number; playing?: number }) => {
           const universeResult = universeResults.find(
             (result) => result.universeId === game.id
           );
@@ -271,13 +282,19 @@ const ProjectGallery: React.FC<{ projects: Project[]; title: string; id: string 
             );
             if (matchingGame && matchingGame.externalLink) {
               visitsMap[matchingGame.externalLink] = game.visits;
+              if (typeof game.playing === 'number') {
+                playingMap[matchingGame.externalLink] = game.playing;
+              }
             }
           }
         });
 
         setVisitsData(visitsMap);
+        setPlayingData(playingMap);
+        setMetricsUnavailable(false);
       } catch (error) {
         console.error('Failed to fetch visits:', error);
+        setMetricsUnavailable(true);
       }
     };
 
@@ -356,13 +373,29 @@ const ProjectGallery: React.FC<{ projects: Project[]; title: string; id: string 
         )}
       </div>
 
-      {/* Visits Badge - below title */}
-      {project.externalLink && visitsData[project.externalLink] && (
-        <div className="flex items-center gap-1.5 mb-3 px-3 py-1.5 glass-button rounded-lg w-fit text-sm font-medium text-primary">
-          <Eye className="w-4 h-4" />
-          <span>{formatVisits(visitsData[project.externalLink])} visits</span>
-        </div>
-      )}
+      {/* Visits + CCU Badges - stacked below title */}
+      <div className="flex flex-col gap-2 mb-3">
+        {project.externalLink && (visitsData[project.externalLink] !== undefined || metricsUnavailable) && (
+          <div className="flex items-center gap-1.5 px-3 py-1.5 glass-button rounded-lg w-fit text-sm font-medium text-primary">
+            <Eye className="w-4 h-4" />
+            <span>
+              {visitsData[project.externalLink] !== undefined
+                ? `${formatVisits(visitsData[project.externalLink])}+ visits`
+                : 'Visits unavailable'}
+            </span>
+          </div>
+        )}
+        {project.externalLink && (playingData[project.externalLink] !== undefined || metricsUnavailable) && (
+          <div className="flex items-center gap-1.5 px-3 py-1.5 glass-button rounded-lg w-fit text-sm font-medium text-emerald-400">
+            <span className="inline-block w-2 h-2 rounded-full bg-emerald-400" />
+            <span>
+              {playingData[project.externalLink] !== undefined
+                ? `${formatVisits(playingData[project.externalLink])} Playing`
+                : 'CCU unavailable'}
+            </span>
+          </div>
+        )}
+      </div>
       
       <p className="text-muted-foreground text-sm inter-font mb-4">{project.description}</p>
       <div className="flex flex-wrap gap-2">

@@ -1,8 +1,108 @@
+import React, { useEffect, useMemo, useState } from 'react';
 import { PortfolioPage, PortfolioPageProps } from "@/components/ui/starfall-portfolio-landing";
 import { Clock, FileCode, Palette, DollarSign, Smartphone } from 'lucide-react';
 
+// Simple helpers reused from the projects widget
+const formatVisits = (visits: number): string => {
+  if (visits >= 1_000_000) return `${(visits / 1_000_000).toFixed(1)}m`;
+  if (visits >= 1_000) return `${(visits / 1_000).toFixed(1)}k`;
+  return visits.toString();
+};
+
+const extractPlaceId = (url: string): string | null => {
+  const match = url.match(/\/games\/(\d+)\//);
+  return match ? match[1] : null;
+};
 
 const Index = () => {
+  const [totalVisits, setTotalVisits] = useState<number | null>(null);
+  const [totalPlaying, setTotalPlaying] = useState<number | null>(null);
+  const [metricsUnavailable, setMetricsUnavailable] = useState(false);
+
+  useEffect(() => {
+    const fetchTotals = async () => {
+      try {
+        const robloxGames = portfolioData.games?.filter(
+          (game) => game.externalLink?.includes('roblox.com/games')
+        ) || [];
+
+        const placeIds = [...new Set(
+          robloxGames
+            .map((game) => extractPlaceId(game.externalLink || ''))
+            .filter((id): id is string => id !== null)
+        )];
+
+        if (placeIds.length === 0) return;
+
+        // Try direct first, then fall back to a CORS proxy
+        const proxyUrl = (url: string) => `https://corsproxy.io/?${encodeURIComponent(url)}`;
+        const fetchWithFallback = async (url: string) => {
+          try {
+            const res = await fetch(url);
+            if (!res.ok) throw new Error(`Status ${res.status}`);
+            return await res.json();
+          } catch (err) {
+            const proxied = await fetch(proxyUrl(url));
+            if (!proxied.ok) throw new Error(`Proxy status ${proxied.status}`);
+            return proxied.json();
+          }
+        };
+
+        const universePromises = placeIds.map((placeId) =>
+          fetchWithFallback(`https://apis.roblox.com/universes/v1/places/${placeId}/universe`)
+            .then((data) => ({ placeId, universeId: data.universeId }))
+            .catch(() => ({ placeId, universeId: null }))
+        );
+
+        const universeResults = await Promise.all(universePromises);
+        const validUniverseIds = universeResults
+          .filter((result) => result.universeId)
+          .map((result) => result.universeId);
+
+        if (validUniverseIds.length === 0) return;
+
+        const gameData = await fetchWithFallback(
+          `https://games.roblox.com/v1/games?universeIds=${validUniverseIds.join(',')}`
+        );
+
+        const totals = (gameData.data || []).reduce(
+          (acc: { visits: number; playing: number }, game: { id: number; visits: number; playing?: number }) => {
+            const universeResult = universeResults.find((result) => result.universeId === game.id);
+            if (!universeResult) return acc;
+            const matchesPortfolio = robloxGames.some(
+              (g) => extractPlaceId(g.externalLink || '') === universeResult.placeId
+            );
+            if (matchesPortfolio) {
+              acc.visits += game.visits || 0;
+              acc.playing += game.playing || 0;
+            }
+            return acc;
+          },
+          { visits: 0, playing: 0 }
+        );
+
+        if (totals.visits > 0) setTotalVisits(totals.visits);
+        if (totals.playing > 0) setTotalPlaying(totals.playing);
+        setMetricsUnavailable(false);
+      } catch (error) {
+        console.error('Failed to fetch total visits/ccu:', error);
+        setMetricsUnavailable(true);
+      }
+    };
+
+    fetchTotals();
+  }, []);
+
+  const totalVisitsLabel = useMemo(() => {
+    if (totalVisits !== null) return `${formatVisits(totalVisits)}+`;
+    return metricsUnavailable ? 'N/A' : '4M+';
+  }, [metricsUnavailable, totalVisits]);
+
+  const totalPlayingLabel = useMemo(() => {
+    if (totalPlaying !== null) return `${formatVisits(totalPlaying)}+`;
+    return metricsUnavailable ? 'N/A' : '—';
+  }, [metricsUnavailable, totalPlaying]);
+
   const portfolioData: PortfolioPageProps = {
     logo: {
       initials: <img src="/favicon.ico" alt="Logo" className="w-full h-full object-contain" />,
@@ -77,12 +177,20 @@ const Index = () => {
         externalLink: 'https://www.roblox.com/games/78545085335980/Steal-a-Streamer',
       }, 
       { 
-        title: 'Fish And Hatch A Brainrot', 
-        description: 'New upcoming game', 
-        tags: ['Full Stack'], 
+        title: 'Spin A Brainrot', 
+        description: 'Scripting contributor', 
+        tags: ['Scripter'], 
         mediaType: 'image',
-        mediaUrl: 'https://tr.rbxcdn.com/180DAY-3e7a2a3d42fa03bf45571599f3328c13/768/432/Image/Webp/noFilter',
-        externalLink: 'https://www.roblox.com/',
+        mediaUrl: 'https://tr.rbxcdn.com/180DAY-fb14cc8ef8631bd093a38878bc282bee/768/432/Image/Webp/noFilter',
+        externalLink: 'https://www.roblox.com/games/112371649846345/Spin-a-Brainrot',
+      }, 
+      { 
+        title: '100 Players Enter 67', 
+        description: 'Full-stack scripter, worked on core game loop, player systems, and monetization, basically the entire game.', 
+        tags: ['Full Stack', 'Scripter'], 
+        mediaType: 'image',
+        mediaUrl: 'https://tr.rbxcdn.com/180DAY-815104f433a91efef5f48b807145d304/768/432/Image/Webp/noFilter',
+        externalLink: 'https://www.roblox.com/games/92439626975142/100-Players-Enter-67',
       }, 
       { 
         title: 'Miami 1986', 
@@ -210,8 +318,8 @@ const Index = () => {
     ],
     stats: [
       { value: '3.5+', label: 'Years of experience' },
-      { value: '10+', label: 'Games contributed' },
-      { value: '4M+', label: 'Visits Contributed' },
+      { value: totalPlayingLabel, label: 'Contributed CCU' },
+      { value: totalVisitsLabel, label: 'Visits Contributed' },
     ],
     discordUsername: 'xo1o',
     showAnimatedBackground: true,
