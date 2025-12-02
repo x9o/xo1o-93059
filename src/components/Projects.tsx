@@ -1,10 +1,10 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Eye } from "lucide-react";
 import VideoPlayer from "@/components/ui/video-player";
 import { GradientCard } from "@/components/ui/gradient-card";
 import { AnimatedHeader } from "@/components/ui/animated-header";
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
 
 const releasedGames = [
   {
@@ -81,6 +81,74 @@ const unreleasedGames = [
 
 const allGames = [...releasedGames, ...unreleasedGames];
 
+const formatVisits = (visits: number): string => {
+  if (visits >= 1000000) {
+    return `${(visits / 1000000).toFixed(1)}M`;
+  } else if (visits >= 1000) {
+    return `${(visits / 1000).toFixed(1)}K`;
+  }
+  return visits.toString();
+};
+
+const extractPlaceId = (url: string): string | null => {
+  const match = url.match(/\/games\/(\d+)\//);
+  return match ? match[1] : null;
+};
+
+const VisitsBadge = ({ gameLink }: { gameLink: string }) => {
+  const [visits, setVisits] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchVisits = async () => {
+      try {
+        const placeId = extractPlaceId(gameLink);
+        if (!placeId) {
+          setLoading(false);
+          return;
+        }
+
+        // Get universe ID from place ID
+        const universeResponse = await fetch(
+          `https://apis.roblox.com/universes/v1/places/${placeId}/universe`
+        );
+        const universeData = await universeResponse.json();
+        const universeId = universeData.universeId;
+
+        if (!universeId) {
+          setLoading(false);
+          return;
+        }
+
+        // Get game data with visits
+        const gameResponse = await fetch(
+          `https://games.roblox.com/v1/games?universeIds=${universeId}`
+        );
+        const gameData = await gameResponse.json();
+
+        if (gameData.data && gameData.data[0]) {
+          setVisits(gameData.data[0].visits);
+        }
+      } catch (error) {
+        console.error("Failed to fetch visits:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchVisits();
+  }, [gameLink]);
+
+  if (loading || visits === null) return null;
+
+  return (
+    <Badge variant="default" className="text-sm font-bold gap-1.5 px-3 py-1">
+      <Eye className="h-4 w-4" />
+      {formatVisits(visits)} visits
+    </Badge>
+  );
+};
+
 const Projects = memo(() => {
   return (
     <section className="py-20 px-4 bg-black" id="projects">
@@ -132,6 +200,11 @@ const Projects = memo(() => {
                         <ExternalLink className="h-5 w-5 text-muted-foreground transition-colors cursor-pointer" />
                       </a>
                     </div>
+                    {'imageUrl' in game && game.imageUrl && game.link.includes('roblox.com/games') && (
+                      <div className="mb-3">
+                        <VisitsBadge gameLink={game.link} />
+                      </div>
+                    )}
                     <CardDescription>
                       {game.description}
                     </CardDescription>
