@@ -1,9 +1,23 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { ChevronLeft, ChevronRight, ExternalLink, Copy, Clock, FileCode, Palette, DollarSign, Smartphone } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ExternalLink, Copy, Clock, FileCode, Palette, DollarSign, Smartphone, Eye } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { SparklesCore } from '@/components/ui/sparkles';
 
+// Helper functions for Roblox visit counts
+const formatVisits = (visits: number): string => {
+  if (visits >= 1000000) {
+    return `${(visits / 1000000).toFixed(1)}M`;
+  } else if (visits >= 1000) {
+    return `${(visits / 1000).toFixed(1)}K`;
+  }
+  return visits.toString();
+};
+
+const extractPlaceId = (url: string): string | null => {
+  const match = url.match(/\/games\/(\d+)\//);
+  return match ? match[1] : null;
+};
 // --- TYPE DEFINITIONS FOR PROPS ---
 interface NavLink { label: string; href: string; }
 interface Project { 
@@ -196,6 +210,7 @@ const ProjectGallery: React.FC<{ projects: Project[]; title: string; id: string 
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
+  const [visitsData, setVisitsData] = useState<Record<string, number>>({});
   
   useEffect(() => {
     const checkViewport = () => {
@@ -206,6 +221,65 @@ const ProjectGallery: React.FC<{ projects: Project[]; title: string; id: string 
     window.addEventListener('resize', checkViewport);
     return () => window.removeEventListener('resize', checkViewport);
   }, []);
+
+  // Fetch visit counts for Roblox games
+  useEffect(() => {
+    const fetchAllVisits = async () => {
+      try {
+        const robloxGames = projects.filter(
+          (game) => game.externalLink?.includes('roblox.com/games')
+        );
+
+        const placeIds = robloxGames
+          .map((game) => extractPlaceId(game.externalLink || ''))
+          .filter((id): id is string => id !== null);
+
+        if (placeIds.length === 0) return;
+
+        // Fetch universe IDs
+        const universePromises = placeIds.map((placeId) =>
+          fetch(`https://apis.roblox.com/universes/v1/places/${placeId}/universe`)
+            .then((res) => res.json())
+            .then((data) => ({ placeId, universeId: data.universeId }))
+            .catch(() => ({ placeId, universeId: null }))
+        );
+
+        const universeResults = await Promise.all(universePromises);
+        const validUniverseIds = universeResults
+          .filter((result) => result.universeId)
+          .map((result) => result.universeId);
+
+        if (validUniverseIds.length === 0) return;
+
+        // Fetch game data
+        const gameResponse = await fetch(
+          `https://games.roblox.com/v1/games?universeIds=${validUniverseIds.join(',')}`
+        );
+        const gameData = await gameResponse.json();
+
+        const visitsMap: Record<string, number> = {};
+        gameData.data?.forEach((game: { id: number; visits: number }) => {
+          const universeResult = universeResults.find(
+            (result) => result.universeId === game.id
+          );
+          if (universeResult) {
+            const matchingGame = robloxGames.find(
+              (g) => extractPlaceId(g.externalLink || '') === universeResult.placeId
+            );
+            if (matchingGame && matchingGame.externalLink) {
+              visitsMap[matchingGame.externalLink] = game.visits;
+            }
+          }
+        });
+
+        setVisitsData(visitsMap);
+      } catch (error) {
+        console.error('Failed to fetch visits:', error);
+      }
+    };
+
+    fetchAllVisits();
+  }, [projects]);
   
   // Create infinite loop by tripling the array
   const infiniteProjects = [...projects, ...projects, ...projects];
@@ -216,7 +290,6 @@ const ProjectGallery: React.FC<{ projects: Project[]; title: string; id: string 
     setCurrentProjectIndex(prev => prev - 1);
     setTimeout(() => {
       setIsTransitioning(false);
-      // Reset to middle section if we've gone past the first clone
       setCurrentProjectIndex(current => {
         if (current <= 0) {
           return projects.length;
@@ -232,7 +305,6 @@ const ProjectGallery: React.FC<{ projects: Project[]; title: string; id: string 
     setCurrentProjectIndex(prev => prev + 1);
     setTimeout(() => {
       setIsTransitioning(false);
-      // Reset to middle section if we've gone past the last clone
       setCurrentProjectIndex(current => {
         if (current >= projects.length * 2) {
           return projects.length;
@@ -246,6 +318,15 @@ const ProjectGallery: React.FC<{ projects: Project[]; title: string; id: string 
   const renderCard = (project: Project, index: number) => (
     <div key={`${project.title}-${index}`} className="glass-card rounded-2xl p-4 sm:p-6 text-left flex-shrink-0 w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-1rem)]">
       <div className="project-image rounded-xl h-40 sm:h-48 mb-4 overflow-hidden relative group">
+        {/* Visits Badge */}
+        {project.externalLink && visitsData[project.externalLink] && (
+          <div className="absolute top-3 right-3 z-10">
+            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-primary/90 backdrop-blur-sm rounded-full text-primary-foreground text-sm font-bold shadow-lg">
+              <Eye className="w-4 h-4" />
+              {formatVisits(visitsData[project.externalLink])} visits
+            </div>
+          </div>
+        )}
         {project.mediaType === 'image' && project.mediaUrl ? (
           <img 
             src={project.mediaUrl} 
